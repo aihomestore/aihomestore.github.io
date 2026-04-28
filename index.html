@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Generator Nama Random</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: white;
+    text-align: center;
+    padding: 40px;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  button {
+    padding: 12px 18px;
+    margin: 8px;
+    border: none;
+    border-radius: 10px;
+    background: #00c9a7;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+  }
+
+  button:hover {
+    background: #00a98f;
+  }
+
+  input {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    width: 80px;
+    text-align: center;
+  }
+
+  #hasil {
+    margin-top: 20px;
+    font-size: 26px;
+    font-weight: bold;
+  }
+
+  .list {
+    margin-top: 20px;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .item {
+    margin: 5px 0;
+    padding: 10px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .item:hover {
+    background: rgba(255,255,255,0.2);
+  }
+</style>
+</head>
+<body>
+
+<h1>🎲 Generator Nama Random (1000+)</h1>
+
+<button onclick="generateOne()">1 Nama</button>
+<button onclick="generateMany()">Banyak Nama</button>
+<br>
+<input type="number" id="jumlah" value="10" min="1" max="100">
+<p>Klik nama untuk copy</p>
+
+<div id="hasil"></div>
+<div class="list" id="list"></div>
+
+<script>
+const suku1 = [
+"ba","be","bi","bo","bu","ca","ce","ci","co","cu",
+"da","de","di","do","du","fa","fe","fi","fo","fu",
+"ga","ge","gi","go","gu","ha","he","hi","ho","hu",
+"ja","je","ji","jo","ju","ka","ke","ki","ko","ku",
+"la","le","li","lo","lu","ma","me","mi","mo","mu",
+"na","ne","ni","no","nu","pa","pe","pi","po","pu",
+"ra","re","ri","ro","ru","sa","se","si","so","su",
+"ta","te","ti","to","tu","va","ve","vi","vo","vu",
+"za","ze","zi","zo","zu"
+];
+
+const suku2 = [
+"ran","rin","ron","rus","lan","lin","lon","lus",
+"tan","tin","ton","tus","kan","kin","kon","kus",
+"zan","zin","zon","zus","var","vin","von","vus",
+"dar","din","don","dus","far","fin","fon","fus",
+"nar","nin","non","nus","sar","sin","son","sus",
+"qar","qin","qon","qus","mir","mor","mur","mel",
+"xel","xar","xor","xir","zor","zir","zor","zul"
+];
+
+function random(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function generateName() {
+  return random(suku1) + random(suku2);
+}
+
+function generateOne() {
+  document.getElementById("list").innerHTML = "";
+  document.getElementById("hasil").innerText = generateName();
+}
+
+function generateMany() {
+  let jumlah = document.getElementById("jumlah").value;
+  let hasil = "";
+
+  for (let i = 0; i < jumlah; i++) {
+    let nama = generateName();
+    hasil += `<div class="item" onclick="copyText('${nama}')">${nama}</div>`;
+  }
+
+  document.getElementById("list").innerHTML = hasil;
+  document.getElementById("hasil").innerText = "";
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text);
+  alert("Disalin: " + text);
+}
+</script>
+
+</body>
+</html>
