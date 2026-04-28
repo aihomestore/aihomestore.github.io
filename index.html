@@ -4,111 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Premium Tool Panel</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-body{
-  margin:0;
-  font-family:'Poppins',sans-serif;
-  background:#0f172a;
-  color:white;
-}
-
-.header{
-  padding:20px;
-  text-align:center;
-  font-size:18px;
-  font-weight:700;
-  background:linear-gradient(90deg,#3b82f6,#06b6d4);
-}
-
-.container{
-  padding:15px;
-}
-
-.card{
-  background:#1e293b;
-  margin-bottom:15px;
-  padding:15px;
-  border-radius:15px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.3);
-}
-
-.title{
-  font-size:14px;
-  font-weight:600;
-  margin-bottom:10px;
-  color:#93c5fd;
-}
-
-.btn{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  background:linear-gradient(90deg,#3b82f6,#06b6d4);
-  color:white;
-  font-weight:600;
-  cursor:pointer;
-}
-
-.input{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:none;
-  margin-bottom:10px;
-  outline:none;
-}
-
-.result{
-  margin-top:10px;
-  font-weight:600;
-  color:#22c55e;
-}
-
-.link-box{
-  background:#0f172a;
-  padding:10px;
-  border-radius:10px;
-  margin-top:8px;
-  font-size:12px;
-  word-break:break-all;
-  color:#cbd5e1;
-}
-
-.copy{
-  margin-top:5px;
-  padding:6px;
-  width:100%;
-  border:none;
-  border-radius:8px;
-  background:#334155;
-  color:white;
-  font-size:12px;
-  cursor:pointer;
-}
-
-.otp{
-  font-size:22px;
-  font-weight:700;
-  color:#fbbf24;
-  margin-top:10px;
-}
-
-.small{
-  font-size:12px;
-  color:#94a3b8;
-}
+body{ margin:0; font-family:'Poppins',sans-serif; background:#0f172a; color:white; }
+.header{ padding:20px; text-align:center; font-size:18px; font-weight:700; background:linear-gradient(90deg,#3b82f6,#06b6d4); }
+.container{ padding:15px; }
+.card{ background:#1e293b; margin-bottom:15px; padding:15px; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.3); }
+.title{ font-size:14px; font-weight:600; margin-bottom:10px; color:#93c5fd; }
+.btn{ width:100%; padding:12px; border:none; border-radius:10px; background:linear-gradient(90deg,#3b82f6,#06b6d4); color:white; font-weight:600; cursor:pointer; }
+.btn-hero{ background:linear-gradient(90deg,#f59e0b,#ef4444); }
+.input{ width:100%; padding:10px; border-radius:10px; border:none; margin-bottom:10px; outline:none; box-sizing:border-box; }
+.result{ margin-top:10px; font-weight:600; color:#22c55e; }
+.otp{ font-size:22px; font-weight:700; color:#fbbf24; margin-top:10px; }
+.small{ font-size:12px; color:#94a3b8; }
+.link-box{ background:#0f172a; padding:10px; border-radius:10px; margin-top:8px; font-size:12px; word-break:break-all; color:#cbd5e1; }
+.copy{ margin-top:5px; padding:6px; width:100%; border:none; border-radius:8px; background:#334155; color:white; font-size:12px; cursor:pointer; }
 </style>
 </head>
 
 <body>
-
 <div class="header">⚡ PREMIUM TOOL PANEL</div>
-
 <div class="container">
 
 <div class="card">
@@ -118,13 +35,13 @@ body{
 </div>
 
 <div class="card">
-  <div class="title">🔐 OTP AUTO</div>
+  <div class="title">🦸‍♂️ SMS HERO AUTO</div>
 
-  <input class="input" id="idOtp" placeholder="Masukkan ID order">
+  <input class="input" id="layanan" placeholder="Kode Layanan (misal: wa, tg, ig)">
 
-  <button class="btn" onclick="saveID()">Simpan ID</button>
+  <button class="btn btn-hero" onclick="pesanNomor()">Pesan Nomor</button>
 
-  <div class="small">ID: <span id="id">-</span></div>
+  <div class="small" style="margin-top: 10px;">ID: <span id="id">-</span></div>
   <div class="small">📱 Nomor: <span id="nomor">-</span></div>
 
   <div class="otp" id="otp">-</div>
@@ -138,15 +55,10 @@ body{
 </div>
 
 <script>
-
-// ===== GENERATOR =====
+// ===== GENERATOR NAMA =====
 const first=["Ahmad","Budi","Siti","Rina","Dewi","Aisyah","Rizky","Fajar"];
 const last=["Santoso","Pratama","Wijaya","Saputra","Rahman","Firmansyah"];
-
-function rand(arr){
-  return arr[Math.floor(Math.random()*arr.length)];
-}
-
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 function genNama(){
   let nama = rand(first)+" "+rand(last);
   document.getElementById("nama").innerText = nama;
@@ -155,71 +67,72 @@ function genNama(){
 
 // ===== LINKS =====
 const data=[
-{n:"AWAW",l:"https://s.shopee.co.id/6VKFY7rZoL"},
-{n:"WHITE CYBER",l:"https://s.shopee.co.id/9fHHK4KU73"},
-{n:"ALFA DIGITAL",l:"https://s.shopee.co.id/4qC1ZEp4uu"}
+  {n:"AWAW",l:"https://s.shopee.co.id/6VKFY7rZoL"},
+  {n:"WHITE CYBER",l:"https://s.shopee.co.id/9fHHK4KU73"},
+  {n:"ALFA DIGITAL",l:"https://s.shopee.co.id/4qC1ZEp4uu"}
 ];
-
 let html="";
 data.forEach(d=>{
-  html+=`
-    <div class="link-box">
-      <b>${d.n}</b><br>
-      ${d.l}
-      <button class="copy" onclick="copy('${d.l}')">Copy</button>
-    </div>
-  `;
+  html+=`<div class="link-box"><b>${d.n}</b><br>${d.l}<button class="copy" onclick="copy('${d.l}')">Copy</button></div>`;
 });
 document.getElementById("links").innerHTML=html;
+function copy(t){ navigator.clipboard.writeText(t); }
 
-function copy(t){
-  navigator.clipboard.writeText(t);
-}
 
-// ===== OTP =====
-let currentID="";
+// ===== SMS HERO SYSTEM =====
+let currentID = "";
+let checkInterval;
 
-function saveID(){
-  let id=document.getElementById("idOtp").value;
-  if(!id) return;
+function pesanNomor(){
+  // Ambil kode dari input, default-nya 'ot' (Other) kalau kosong
+  let layanan = document.getElementById("layanan").value || "ot";
+  
+  document.getElementById("nomor").innerText = "Sedang memesan...";
+  document.getElementById("otp").innerText = "-";
+  
+  // Memanggil Cloudflare untuk memesan nomor
+  fetch(`https://aihomestore.alazam04.workers.dev/api/order?service=${layanan}`)
+  .then(r => r.json())
+  .then(d => {
+    if(d.number){
+      currentID = d.id;
+      document.getElementById("id").innerText = d.id;
+      document.getElementById("nomor").innerText = d.number;
+      document.getElementById("otp").innerText = "Menunggu SMS...";
+      
+      // Copy nomor otomatis
+      navigator.clipboard.writeText(d.number);
 
-  currentID=id;
-  localStorage.setItem("hero_id",id);
-
-  ambilOTP();
-}
-
-window.onload=function(){
-  let saved=localStorage.getItem("hero_id");
-  if(saved){
-    currentID=saved;
-    document.getElementById("idOtp").value=saved;
-    ambilOTP();
-  }
-}
-
-function ambilOTP(){
-  if(!currentID) return;
-
-  // LINK CLOUDFLARE ANDA YANG BARU
-  fetch(`https://aihomestore.alazam04.workers.dev/api/otp?id=${currentID}`)
-  .then(r=>r.json())
-  .then(d=>{
-    document.getElementById("id").innerText=d.id||"-";
-    document.getElementById("nomor").innerText=d.number||"-";
-    document.getElementById("otp").innerText=d.otp||"-";
-
-    // Otomatis copy OTP jika ada (selain tanda "-")
-    if(d.otp && d.otp !== "-"){
-      navigator.clipboard.writeText(d.otp);
+      // Mulai mengecek OTP setiap 5 detik
+      clearInterval(checkInterval);
+      checkInterval = setInterval(cekOTP, 5000);
+    } else {
+      alert("Gagal Memesan: " + (d.error || "Cek saldo"));
+      document.getElementById("nomor").innerText = "-";
     }
+  }).catch(e => {
+    alert("Terjadi kesalahan jaringan.");
   });
 }
 
-// Cek OTP baru setiap 5 detik
-setInterval(ambilOTP, 5000);
+function cekOTP(){
+  if(!currentID) return;
 
+  // Memanggil Cloudflare untuk mengecek status OTP
+  fetch(`https://aihomestore.alazam04.workers.dev/api/check?id=${currentID}`)
+  .then(r => r.json())
+  .then(d => {
+    if(d.otp && d.otp !== "-"){
+      document.getElementById("otp").innerText = d.otp;
+      
+      // Copy OTP otomatis
+      navigator.clipboard.writeText(d.otp);
+      
+      // Hentikan pengecekan jika OTP sudah muncul
+      clearInterval(checkInterval); 
+    }
+  });
+}
 </script>
-
 </body>
 </html>
