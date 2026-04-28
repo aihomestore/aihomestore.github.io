@@ -13,17 +13,21 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    let otp = "";
+    let raw = "";
 
     if (data.sms) {
-      otp = data.sms;
+      raw = data.sms;
     } else if (data.code) {
-      otp = data.code;
+      raw = data.code;
     } else if (data.message) {
-      otp = data.message;
+      raw = data.message;
     } else {
-      otp = JSON.stringify(data);
+      raw = JSON.stringify(data);
     }
+
+    // 🔥 AMBIL ANGKA SAJA (OTP)
+    let otpMatch = raw.match(/\d{4,8}/); // ambil angka 4-8 digit
+    let otp = otpMatch ? otpMatch[0] : "Menunggu OTP";
 
     res.status(200).json({ otp });
 
