@@ -14,12 +14,17 @@ body{ margin:0; font-family:'Poppins',sans-serif; background:#0f172a; color:whit
 .title{ font-size:14px; font-weight:600; margin-bottom:10px; color:#93c5fd; }
 .btn{ width:100%; padding:12px; border:none; border-radius:10px; background:linear-gradient(90deg,#3b82f6,#06b6d4); color:white; font-weight:600; cursor:pointer; transition: 0.3s; }
 .btn:active{ transform: scale(0.98); }
-.btn-shopee{ background:linear-gradient(90deg,#ee4d2d,#ff7337); text-transform: uppercase; margin-top: 5px; } 
-.select-op{ width:100%; padding:10px; border-radius:10px; border:none; background:#0f172a; color:white; margin-bottom:8px; outline:none; font-family:'Poppins'; font-size: 13px; }
+.btn-shopee{ background:linear-gradient(90deg,#ee4d2d,#ff7337); text-transform: uppercase; } 
+.result-nama{ margin-top:10px; font-weight:600; color:#22c55e; text-align:center; min-height: 20px; font-size: 16px; }
+.select-op{ width:100%; padding:10px; border-radius:10px; border:none; background:#0f172a; color:white; margin-bottom:10px; outline:none; font-family:'Poppins'; font-size: 13px; }
 .otp-box{ font-size:28px; font-weight:700; color:#fbbf24; margin-top:15px; text-align: center; border: 2px dashed #475569; padding: 15px; border-radius: 12px; background: #111827; }
 .info-row{ font-size:13px; color:#94a3b8; display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding: 5px 0; border-bottom: 1px solid #334155; }
 .val{ color: white; font-weight: 600; }
 .copy-btn{ padding:4px 10px; border:none; border-radius:6px; background:#3b82f6; color:white; font-size:11px; cursor:pointer; }
+.sub-links { display: none; margin-top: 10px; padding: 10px; background: #0f172a; border-radius: 10px; max-height: 400px; overflow-y: auto; }
+.sub-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1e293b; font-size: 12px; }
+.sub-item:last-child { border: none; }
+.label-link { color: #cbd5e1; font-weight: 500; max-width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -27,9 +32,13 @@ body{ margin:0; font-family:'Poppins',sans-serif; background:#0f172a; color:whit
 <div class="container">
 
 <div class="card">
-  <div class="title">🛍️ SHOPEE OTP HERO</div>
-  
-  <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">Pilih Operator:</div>
+  <div class="title">🎲 GENERATOR NAMA</div>
+  <button class="btn" onclick="genNama()">Generate & Copy Nama</button>
+  <div class="result-nama" id="nama">-</div>
+</div>
+
+<div class="card">
+  <div class="title">🛍️ SHOPEE OTP (TERMURAH)</div>
   <select class="select-op" id="operator">
     <option value="any">Semua Operator (Otomatis)</option>
     <option value="telkomsel">Telkomsel</option>
@@ -39,15 +48,9 @@ body{ margin:0; font-family:'Poppins',sans-serif; background:#0f172a; color:whit
     <option value="axis">Axis</option>
   </select>
 
-  <div style="font-size: 11px; color: #94a3b8; margin-bottom: 5px;">Prioritas:</div>
-  <select class="select-op" id="prioritas">
-    <option value="cheap">Harga Termurah (Sangat Disarankan)</option>
-    <option value="fast">Cepat Diterima (Harga Standar)</option>
-  </select>
+  <button class="btn btn-shopee" onclick="pesanNomor()">Ambil Nomor Shopee</button>
 
-  <button class="btn btn-shopee" onclick="pesanNomor()">Ambil Nomor Termurah</button>
-
-  <div class="info-row"><span>Order ID</span><span class="val" id="id">-</span></div>
+  <div class="info-row"><span>ID Order</span><span class="val" id="id">-</span></div>
   <div class="info-row">
     <span>Nomor HP</span>
     <div>
@@ -60,31 +63,70 @@ body{ margin:0; font-family:'Poppins',sans-serif; background:#0f172a; color:whit
 </div>
 
 <div class="card">
-  <div class="title">🔗 Link Order</div>
-  <div id="links"></div>
+  <div class="title">🔗 LINK ORDER</div>
+  <button class="btn" onclick="toggleLinks()" id="btnToggle">Buka Daftar Sub-Link</button>
+  <div class="sub-links" id="subLinks">
+    <div class="sub-item"><span class="label-link">AWAW 1</span><button class="copy-btn" onclick="copyDirect('https://s.shopee.co.id/6VKFY7rZoL')">Copy</button></div>
+    <div class="sub-item"><span class="label-link">AWAW 2</span><button class="copy-btn" onclick="copyDirect('https://s.shopee.co.id/6px5wm8CN6')">Copy</button></div>
+    <div class="sub-item"><span class="label-link">AWAW 3</span><button class="copy-btn" onclick="copyDirect('https://s.shopee.co.id/901aWmbQPp')">Copy</button></div>
+    <div class="sub-item"><span class="label-link">AWAW 4</span><button class="copy-btn" onclick="copyDirect('https://s.shopee.co.id/7ppd8fwWIc')">Copy</button></div>
+    <div class="sub-item"><span class="label-link">WHITE CYBER</span><button class="copy-btn" onclick="copyDirect('https://s.shopee.co.id/9fHHK4KU73')">Copy</button></div>
+    <div class="sub-item"><span class="label-link">ALFA DIGITAL</span><button class="copy-btn" onclick="copyDirect('https://s.shopee.co.id/4qC1ZEp4uu')">Copy</button></div>
+    <div class="sub-item"><span class="label-link">SRIBUFOLLS</span><button class="copy-btn" onclick="copyDirect('https://s.shopee.co.id/3Vgdyp7e4p')">Copy</button></div>
+    <div class="sub-item"><span class="label-link">HELENA STUFF</span><button class="copy-btn" onclick="copyDirect('https://s.shopee.co.id/AADXv6H81t')">Copy</button></div>
+    <div class="sub-item"><span class="label-link">SECRET PANEL</span><button class="copy-btn" onclick="copyDirect('https://s.shopee.co.id/4AwKm7hE75')">Copy</button></div>
+    <div class="sub-item"><span class="label-link">PROMETIXPANEL</span><button class="copy-btn" onclick="copyDirect('https://s.shopee.co.id/9KeQve7UK9')">Copy</button></div>
+    <div class="sub-item"><span class="label-link">YOAKE 1</span><button class="copy-btn" onclick="copyDirect('https://s.shopee.co.id/8fOk8T99r5')">Copy</button></div>
+    <div class="sub-item"><span class="label-link">YOAKE 2</span><button class="copy-btn" onclick="copyDirect('https://s.shopee.co.id/3LNDmhKKrw')">Copy</button></div>
+    <div class="sub-item"><span class="label-link">MAMA WHITE CYBER</span><button class="copy-btn" onclick="copyDirect('https://s.shopee.co.id/2g7J598NmS')">Copy</button></div>
+  </div>
 </div>
 
 </div>
 
 <script>
+// GEN NAMA
+const depan = ["Ahmad","Budi","Siti","Rina","Dewi","Aisyah","Rizky","Fajar","Eko","Maya","Andi","Sari","Hadi","Yanto","Lestari","Putra","Putri","Bambang","Agus","Indah","Mega","Surya","Taufik","Nur","Anisa","Dedi","Rita","Yudi","Siska","Zul","Fahmi","Rendra","Intan","Arif","Wawan"];
+const belakang = ["Santoso","Pratama","Wijaya","Saputra","Rahman","Firmansyah","Kusuma","Hidayat","Setiawan","Nugroho","Mulyono","Siregar","Nasution","Purnama","Wulandari","Laksana","Gumilang","Sujatmiko","Gunawan","Subagjo","Zulkarnain","Fauzi","Maulana","Fitrianto","Haryanto","Wibowo","Suherman","Budiman","Junaidi","Tanjung","Hutapea","Simbas","Sholeh"];
+
+function genNama(){
+  let n = depan[Math.floor(Math.random()*depan.length)] + " " + belakang[Math.floor(Math.random()*belakang.length)];
+  document.getElementById("nama").innerText = n;
+  navigator.clipboard.writeText(n);
+}
+
+// LINK TOGGLE
+function toggleLinks() {
+  const box = document.getElementById("subLinks");
+  const btn = document.getElementById("btnToggle");
+  if(box.style.display === "block") {
+    box.style.display = "none";
+    btn.innerText = "Buka Daftar Sub-Link";
+  } else {
+    box.style.display = "block";
+    btn.innerText = "Tutup Daftar Sub-Link";
+  }
+}
+function copyDirect(t){ navigator.clipboard.writeText(t); alert("Link disalin!"); }
+
+// COPY TEKS
 function copyTeks(id) {
   const t = document.getElementById(id).innerText;
   if(t && t !== "-") { navigator.clipboard.writeText(t); alert("Berhasil dicopy!"); }
 }
 
+// SMS HERO
 let orderID = "";
 let timer;
 
 function pesanNomor(){
   const svc = "ka"; 
   const op = document.getElementById("operator").value;
-  
-  document.getElementById("nomor").innerText = "Mencari harga termurah...";
+  document.getElementById("nomor").innerText = "Ordering...";
   document.getElementById("otp").innerText = "WAITING";
-  document.getElementById("status").innerText = "Menghubungi server Hero-SMS...";
+  document.getElementById("status").innerText = "Proses...";
   document.getElementById("btnCopy").style.display = "none";
   
-  // Mengirim request ke Cloudflare
   fetch(`https://aihomestore.alazam04.workers.dev/api/order?service=${svc}&operator=${op}`)
   .then(r => r.json())
   .then(d => {
@@ -93,14 +135,13 @@ function pesanNomor(){
       document.getElementById("id").innerText = d.id;
       document.getElementById("nomor").innerText = d.number;
       document.getElementById("btnCopy").style.display = "inline-block";
-      document.getElementById("status").innerText = "Berhasil dapat nomor termurah!";
+      document.getElementById("status").innerText = "Siap! Menunggu SMS...";
       navigator.clipboard.writeText(d.number);
       clearInterval(timer);
       timer = setInterval(cekOTP, 5000);
     } else {
-      alert("Gagal: " + (d.error || "Stok termurah habis, coba ganti operator"));
+      alert("Gagal: " + (d.error || "Coba operator lain"));
       document.getElementById("nomor").innerText = "-";
-      document.getElementById("status").innerText = "";
     }
   });
 }
@@ -118,16 +159,6 @@ function cekOTP(){
     }
   });
 }
-
-const links = [{n:"AWAW",l:"https://s.shopee.co.id/6VKFY7rZoL"},{n:"WHITE CYBER",l:"https://s.shopee.co.id/9fHHK4KU73"},{n:"ALFA DIGITAL",l:"https://s.shopee.co.id/4qC1ZEp4uu"}];
-let h = "";
-links.forEach(x => {
-  h += `<div style="background:#0f172a; padding:10px; border-radius:10px; margin-top:8px; font-size:12px;">
-    <b>${x.n}</b><br>${x.l}
-    <button onclick="navigator.clipboard.writeText('${x.l}')" style="width:100%; margin-top:5px; padding:5px; border-radius:5px; border:none; background:#334155; color:white; font-size:11px; cursor:pointer;">Copy Link</button>
-  </div>`;
-});
-document.getElementById("links").innerHTML = h;
 </script>
 </body>
 </html>
