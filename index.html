@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aihomestore Panel V7</title>
+<title>Aihomestore Panel V8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -26,7 +26,6 @@ body { margin:0; font-family:'Poppins',sans-serif; background: var(--bg); color:
 .btn-shopee { background: var(--shopee); box-shadow: 0 4px 12px rgba(238, 77, 45, 0.3); }
 .btn:active { transform: scale(0.96); opacity: 0.9; }
 
-/* OTP Box Style Updated */
 .otp-container { background: #0f172a; border-radius: 15px; padding: 15px; margin-top: 15px; text-align: center; border: 2px dashed #334155; }
 .otp-box { font-size: 30px; font-weight: 800; color: var(--accent); letter-spacing: 8px; text-indent: 8px; }
 .status-text { font-size: 11px; color: #60a5fa; margin-top: 5px; font-style: italic; }
@@ -36,12 +35,11 @@ body { margin:0; font-family:'Poppins',sans-serif; background: var(--bg); color:
 .info-label { color: #94a3b8; }
 .info-val { font-weight: 600; color: #f1f5f9; }
 
-.result-address { margin-top: 15px; background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 12px; font-size: 13px; border: 1px solid rgba(255,255,255,0.1); }
+.result-address { margin-top: 5px; background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 12px; font-size: 13px; border: 1px solid rgba(255,255,255,0.1); }
 .address-val { color: #22c55e; font-weight: 600; display: block; }
 
 .select-op { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: white; margin-bottom: 12px; outline: none; }
 
-/* Elegant Toast Notification */
 #toast { visibility: hidden; min-width: 200px; background-color: #3b82f6; color: #fff; text-align: center; border-radius: 10px; padding: 12px; position: fixed; z-index: 100; left: 50%; transform: translateX(-50%); bottom: 30px; font-size: 13px; font-weight: 600; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
 
@@ -81,20 +79,19 @@ body { margin:0; font-family:'Poppins',sans-serif; background: var(--bg); color:
             <div id="status" class="status-text">Ready...</div>
         </div>
         <div style="display: flex; gap: 10px; margin-top: 10px;">
-            <button id="btnCopyNomor" class="btn" style="display:none; background:#334155;" onclick="copyTeks('nomor')">COPY NOMOR</button>
+            <button id="btnCopyNomor" class="btn" style="display:none; background:#334155;" onclick="copyTeks('nomor', true)">COPY NOMOR</button>
             <button id="btnReset" class="btn" style="background:#4b5563; font-size:12px;" onclick="resetOrder()">RESET</button>
         </div>
     </div>
 
     <div class="card">
-        <div class="title">🏠 Generator Data Penerima</div>
-        <button class="btn" onclick="genDataLengkap()">GENERATE DATA BARU</button>
+        <div class="title">🏠 Data Penerima</div>
         <div class="result-address" id="fullData">
             Nama: <span class="address-val" id="resNama">-</span>
             Alamat: <span class="address-val" id="resAlamat">-</span>
             Detail: <span class="address-val" id="resDetail">-</span>
         </div>
-        <button class="btn" style="margin-top:10px; background:#334155; font-size:12px;" onclick="copyFullAddress()">COPY SEMUA DATA</button>
+        <button class="btn" style="margin-top:10px; background:#334155; font-size:12px;" onclick="generateAndCopy()">AUTO GENERATE & COPY DATA</button>
     </div>
 
     <div class="card">
@@ -124,6 +121,7 @@ function showToast(msg) {
   setTimeout(() => { x.className = x.className.replace("show", ""); }, 3000);
 }
 
+// Data Recovery tanpa toast
 window.onload = () => {
     if(localStorage.getItem('saved_name')){
         document.getElementById("resNama").innerText = localStorage.getItem('saved_name');
@@ -140,35 +138,30 @@ window.onload = () => {
     }
 };
 
-// Generator Logic
 const n_depan = ["Ahmad","Budi","Siti","Rina","Dewi","Aisyah","Rizky","Fajar","Eko","Maya","Andi","Sari","Hadi","Yanto","Lestari","Agus","Indah","Mega","Surya","Taufik"];
 const n_belakang = ["Santoso","Pratama","Wijaya","Saputra","Rahman","Firmansyah","Kusuma","Hidayat","Setiawan","Nugroho","Purnama","Gunawan","Wibowo","Suherman","Budiman"];
 const jalan = ["Jl. Mawar","Jl. Melati","Jl. Merdeka","Jl. Sudirman","Jl. Gajah Mada","Jl. Ahmad Yani","Jl. Diponegoro","Jl. Pahlawan","Jl. Kenanga","Jl. Dahlia"];
 const kota = ["Jakarta Selatan","Bandung","Surabaya","Semarang","Medan","Makassar","Bekasi","Tangerang"];
 const kodepos = ["12340","40123","60111","50125","20111","90111","17111","15111"];
 
-function genDataLengkap(){
+// Fungsi Generate Baru + Copy Sekaligus
+function generateAndCopy() {
     let nama = n_depan[Math.floor(Math.random()*n_depan.length)] + " " + n_belakang[Math.floor(Math.random()*n_belakang.length)];
     let almt = jalan[Math.floor(Math.random()*jalan.length)] + " No. " + (Math.floor(Math.random()*100)+1);
     let det = kota[Math.floor(Math.random()*kota.length)] + " (" + kodepos[Math.floor(Math.random()*kodepos.length)] + ")";
+    
     document.getElementById("resNama").innerText = nama;
     document.getElementById("resAlamat").innerText = almt;
     document.getElementById("resDetail").innerText = det;
+    
     localStorage.setItem('saved_name', nama);
     localStorage.setItem('saved_addr', almt);
     localStorage.setItem('saved_det', det);
+    
+    navigator.clipboard.writeText(`Nama: ${nama}\nAlamat: ${almt}\n${det}`);
+    showToast("Data Baru Digenerate & Disalin!");
 }
 
-function copyFullAddress(){
-    let n = document.getElementById("resNama").innerText;
-    let a = document.getElementById("resAlamat").innerText;
-    let d = document.getElementById("resDetail").innerText;
-    if(n === "-") return;
-    navigator.clipboard.writeText(`Nama: ${n}\nAlamat: ${a}\n${d}`);
-    showToast("Data Alamat Disalin!");
-}
-
-// Engine Logic
 let orderID = "";
 let timer;
 
@@ -205,7 +198,7 @@ function cekOTP(){
       document.getElementById("status").innerText = "OTP MASUK!";
       localStorage.setItem('saved_otp', res.otp);
       navigator.clipboard.writeText(res.otp);
-      showToast("OTP Disalin!");
+      showToast("OTP Baru Disalin!");
       clearInterval(timer);
     }
   });
@@ -225,8 +218,10 @@ function resetOrder(){
 }
 
 function copyDirect(t){ navigator.clipboard.writeText(t); showToast("Link Disalin!"); }
-function copyTeks(id) { navigator.clipboard.writeText(document.getElementById(id).innerText); showToast("Disalin!"); }
+function copyTeks(id, manual) { 
+    navigator.clipboard.writeText(document.getElementById(id).innerText); 
+    if(manual) showToast("Disalin!"); 
+}
 </script>
 </body>
-            </html>
-            
+</html>
