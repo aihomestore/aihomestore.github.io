@@ -1,30 +1,47 @@
 export default async function handler(req, res) {
-  const API_KEY = "ISI_API_KEY_KAMU";
-  const ID = "ISI_ID_NUMBER_KAMU";
+  const API_KEY = "cd2dc704Be3cdd39f872fB5e567ec38e";
 
   try {
-    const response = await fetch(
+    // 🔹 1. Ambil order terbaru (ID)
+    const orderRes = await fetch(
+      `https://hero-sms.com/api/v1/order/list?api_key=${API_KEY}`
+    );
+
+    const orderData = await orderRes.json();
+
+    // Ambil ID terakhir
+    let lastOrder = orderData?.data?.[0];
+    let ID = lastOrder?.id;
+
+    if (!ID) {
+      return res.status(200).json({ otp: "Belum ada order" });
+    }
+
+    // 🔹 2. Ambil OTP dari ID itu
+    const smsRes = await fetch(
       `https://hero-sms.com/api/v1/sms/check?api_key=${API_KEY}&id=${ID}`
     );
 
-    const data = await response.json();
+    const smsData = await smsRes.json();
 
-    // 🔥 Ambil OTP dari berbagai kemungkinan format
     let otp = "";
 
-    if (data.sms) {
-      otp = data.sms;
-    } else if (data.code) {
-      otp = data.code;
-    } else if (data.message) {
-      otp = data.message;
+    if (smsData.sms) {
+      otp = smsData.sms;
+    } else if (smsData.code) {
+      otp = smsData.code;
+    } else if (smsData.message) {
+      otp = smsData.message;
     } else {
-      otp = JSON.stringify(data); // fallback biar kelihatan isinya
+      otp = JSON.stringify(smsData);
     }
 
-    res.status(200).json({ otp });
+    res.status(200).json({
+      id: ID,
+      otp: otp
+    });
 
   } catch (error) {
-    res.status(500).json({ otp: "Gagal ambil OTP" });
+    res.status(500).json({ otp: "Error ambil data" });
   }
 }
