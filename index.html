@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopee OTP Engine - Tri Server</title>
+    <title>Shopee OTP Engine - Premium Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
     <style>
@@ -41,13 +41,13 @@
             margin-bottom: 20px;
         }
 
-        /* FIX: Mengecilkan tulisan pilihan server dan operator */
+        /* Ukuran font pilihan server & operator lebih kecil */
         .form-select {
             background-color: #0f172a;
             border: 1px solid #334155;
             color: white;
             border-radius: 8px;
-            font-size: 0.8rem; /* Ukuran font dikecilkan */
+            font-size: 0.75rem; 
             font-weight: 500;
         }
 
@@ -70,10 +70,6 @@
             transition: 0.3s;
         }
 
-        .btn-order:active {
-            transform: scale(0.98);
-        }
-
         .otp-display {
             background-color: #0f172a;
             border: 2px dashed #334155;
@@ -90,12 +86,6 @@
             letter-spacing: 5px;
         }
 
-        .status-text {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-top: 5px;
-        }
-
         .data-row {
             display: flex;
             justify-content: space-between;
@@ -110,10 +100,41 @@
             padding: 8px 15px;
             border-radius: 8px;
             font-size: 0.85rem;
-            width: 48%;
         }
 
-        #notif-sound { display: none; }
+        /* Styling List Link Order */
+        .link-item {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .link-name {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+
+        .btn-copy-link {
+            background-color: transparent;
+            color: #60a5fa;
+            border: 1px solid #3b82f6;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        .btn-copy-link:active {
+            background-color: #3b82f6;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -133,11 +154,11 @@
                 </div>
                 <div class="col-6">
                     <select id="operatorSelect" class="form-select">
-                        <option value="any">Termurah (Otomatis)</option>
-                        <option value="indosat">Indosat</option>
-                        <option value="telkomsel">Telkomsel</option>
-                        <option value="xl">XL Axiata</option>
-                        <option value="three">Three (3)</option>
+                        <option value="any">TERMURAH</option>
+                        <option value="indosat">INDOSAT</option>
+                        <option value="telkomsel">TELKOMSEL</option>
+                        <option value="xl">XL AXIATA</option>
+                        <option value="three">THREE (3)</option>
                     </select>
                 </div>
             </div>
@@ -157,23 +178,44 @@
 
             <div class="otp-display">
                 <div id="otp-box">WAITING</div>
-                <div class="status-text" id="status-desc">Menunggu SMS masuk...</div>
+                <div class="status-text text-secondary" style="font-size: 0.8rem;" id="status-desc">Ready...</div>
             </div>
 
             <div class="d-flex justify-content-between mt-3">
-                <button class="btn-util" onclick="copyNumber()"><i class="fas fa-copy"></i> Copy Nomor</button>
-                <button class="btn-util" onclick="clearData()"><i class="fas fa-trash"></i> Clear Data</button>
+                <button class="btn-util w-50 me-1" onclick="copyNumber()">COPY NOMOR</button>
+                <button class="btn-util w-50 ms-1" onclick="clearData()">CLEAR DATA</button>
             </div>
         </div>
 
         <div class="main-card">
             <div class="section-title">🏠 NAMA DAN ALAMAT</div>
-            <div id="utility-content" class="p-2 bg-dark rounded border border-secondary" style="font-size: 0.9rem;">
-                <div class="mb-2">Nama: <b id="util-nama" class="text-success">-</b></div>
-                <div class="mb-2">Alamat: <b id="util-alamat" class="text-success">-</b></div>
+            <div class="p-2 bg-dark rounded border border-secondary mb-3" style="font-size: 0.85rem;">
+                <div class="mb-1">Nama: <b id="util-nama" class="text-success">-</b></div>
+                <div class="mb-1">Alamat: <b id="util-alamat" class="text-success">-</b></div>
                 <div>Detail: <b id="util-detail" class="text-success">-</b></div>
             </div>
-            <button class="btn-util w-100 mt-3" onclick="generateRandomData()">Generate Data Baru</button>
+            <button class="btn-util w-100" onclick="generateRandomData()">GENERATE DATA BARU</button>
+        </div>
+
+        <div class="main-card">
+            <div class="section-title">🔗 LINK ORDER SHOPEE</div>
+            
+            <div class="link-item"><span class="link-name">AWAW 1</span><a href="https://s.shopee.co.id/6VKFY7rZoL" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">AWAW 2</span><a href="https://s.shopee.co.id/6px5wm8CN6" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">AWAW 3</span><a href="https://s.shopee.co.id/901aWmbQPp" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">AWAW 4</span><a href="https://s.shopee.co.id/7ppd8fwWIc" target="_blank" class="btn-copy-link">BUKA</a></div>
+            
+            <div class="link-item"><span class="link-name">WHITE CYBER</span><a href="https://s.shopee.co.id/9fHHK4KU73" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">ALFA DIGITAL</span><a href="https://s.shopee.co.id/4qC1ZEp4uu" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">SRIBUFOLLS</span><a href="https://s.shopee.co.id/3Vgdyp7e4p" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">HELENA STUFF</span><a href="https://s.shopee.co.id/AADXv6H81t" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">SECRET PANEL</span><a href="https://s.shopee.co.id/4AwKm7hE75" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">PROMETIXPANEL</span><a href="https://s.shopee.co.id/9KeQve7UK9" target="_blank" class="btn-copy-link">BUKA</a></div>
+            
+            <div class="link-item"><span class="link-name">YOAKE 1</span><a href="https://s.shopee.co.id/8fOk8T99r5" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">YOAKE 2</span><a href="https://s.shopee.co.id/3LNDmhKKrw" target="_blank" class="btn-copy-link">BUKA</a></div>
+            
+            <div class="link-item"><span class="link-name">MAMA WHITE CYBER</span><a href="https://s.shopee.co.id/2g7J598NmS" target="_blank" class="btn-copy-link">BUKA</a></div>
         </div>
 
     </div>
@@ -213,21 +255,17 @@
                 if (data.id && data.number) {
                     localStorage.setItem('order_id', data.id);
                     localStorage.setItem('phone', data.number);
-                    
                     document.getElementById('display-id').innerText = data.id;
                     document.getElementById('display-number').innerText = data.number;
                     document.getElementById('otp-box').innerText = "WAITING";
                     document.getElementById('otp-box').style.color = "#fbbf24";
-                    document.getElementById('status-desc').innerText = "Menunggu SMS masuk...";
-                    
+                    document.getElementById('status-desc').innerText = "Menunggu SMS...";
                     startPolling();
                 } else {
-                    alert("Gagal: " + (data.error || "Server sibuk"));
+                    alert("Gagal: " + (data.error || "Stok Kosong"));
                     document.getElementById('display-number').innerText = "Ready...";
                 }
-            } catch (e) {
-                alert("Koneksi ke Worker Error");
-            } finally {
+            } catch (e) { alert("Error Worker"); } finally {
                 btn.disabled = false;
                 btn.innerText = "Ambil Nomor Shopee";
             }
@@ -249,10 +287,8 @@
 
                 if (data.otp && data.otp !== "-") {
                     document.getElementById('otp-box').innerText = data.otp;
-                    
                     if (data.otp.startsWith("ERR:") || data.otp.startsWith("STAT:")) {
                         document.getElementById('otp-box').style.color = "#ef4444"; 
-                        document.getElementById('status-desc').innerText = "Cek Status...";
                     } else {
                         document.getElementById('otp-box').style.color = "#4ade80"; 
                         document.getElementById('status-desc').innerText = "OTP MASUK!";
@@ -273,7 +309,7 @@
             const num = document.getElementById('display-number').innerText;
             if(num && num !== "Ready...") {
                 navigator.clipboard.writeText(num);
-                alert("Nomor HP disalin!");
+                alert("Nomor disalin!");
             }
         }
 
@@ -281,12 +317,11 @@
             const names = ["Budi Santoso", "Siti Aminah", "Andi Wijaya", "Maya Wibowo", "Rian Hidayat", "Dewi Lestari"];
             const streets = ["Jl. Merdeka No. 10", "Jl. Gajah Mada No. 14", "Jl. Melati Blok C", "Perum Cahaya Indah No. 5"];
             const cities = ["Jakarta (10110)", "Bandung (40111)", "Surabaya (60111)", "Tangerang (15111)"];
-
             document.getElementById('util-nama').innerText = names[Math.floor(Math.random() * names.length)];
             document.getElementById('util-alamat').innerText = streets[Math.floor(Math.random() * streets.length)];
             document.getElementById('util-detail').innerText = cities[Math.floor(Math.random() * cities.length)];
         }
     </script>
 </body>
-                                                                   </html>
-                                                                   
+    </html>
+    
