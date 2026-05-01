@@ -61,9 +61,10 @@ body { margin:0; font-family:'Poppins',sans-serif; background: var(--bg); color:
         <div class="title">🛍️ Shopee OTP Engine</div>
         
         <div style="display:flex; gap:8px;">
-            <select class="select-op" id="server" onchange="saveOp()" style="flex:1;">
-                <option value="hero">🔥 HERO SMS</option>
-                <option value="rumah">🏠 RUMAH OTP</option>
+            <select id="serverSelect" class="form-select ... ">
+    <option value="hero">HERO SMS</option>
+    <option value="rumah">RUMAH OTP</option>
+    <option value="smscode">SMSCODE.GG</option>  
             </select>
             <select class="select-op" id="operator" onchange="saveOp()" style="flex:1;">
                 <option value="any">Termurah</option>
