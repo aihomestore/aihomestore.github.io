@@ -19,6 +19,9 @@
         .data-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; }
         .btn-util { background-color: #334155; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; }
         .btn-success-custom { background-color: #059669; color: white; }
+        .link-item { background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px 15px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .link-name { font-size: 0.75rem; font-weight: bold; color: #94a3b8; text-transform: uppercase;}
+        .btn-copy-link { color: #60a5fa; border: 1px solid #3b82f6; font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -32,174 +35,6 @@
                 <div class="col-6">
                     <select id="serverSelect" class="form-select" onchange="toggleSmsTarget()">
                         <option value="hero">🚀 HERO SMS</option>
-                        <option value="rumah">🏠 RUMAH OTP</option>
-                        <option value="smscode">⚡ SMSCODE.GG</option>
-                    </select>
-                </div>
-                <div class="col-6">
-                    <select id="operatorSelect" class="form-select">
-                        <option value="any">TERMURAH</option>
-                        <option value="indosat">INDOSAT</option>
-                        <option value="telkomsel">TELKOMSEL</option>
-                    </select>
-                </div>
-                
-                <div class="col-12 mt-2" id="sniperBox" style="display:none;">
-                    <input type="number" id="targetPrice" class="form-control" placeholder="Bidik Harga SMSCode (Misal: 115) - Opsional">
-                </div>
-            </div>
-
-            <button class="btn-order" onclick="orderNumber()" id="btnOrder">AMBIL NOMOR SHOPEE</button>
-
-            <div class="mt-4">
-                <div class="data-row"><span class="text-secondary">Order ID</span><span id="display-id">-</span></div>
-                <div class="data-row"><span class="text-secondary">Nomor HP</span><b id="display-number">Ready...</b></div>
-            </div>
-
-            <div class="otp-display">
-                <div id="otp-box">WAITING</div>
-                <div class="status-text text-secondary" style="font-size: 0.8rem;" id="status-desc">Ready...</div>
-            </div>
-
-            <div class="d-flex justify-content-between mt-3">
-                <button class="btn-util w-50 me-1 btn-success-custom" onclick="copyNumber()">COPY NOMOR</button>
-                <button class="btn-util w-50 ms-1" onclick="clearData()">CLEAR DATA</button>
-            </div>
-        </div>
-
-        <div class="main-card">
-            <div class="section-title">🏠 NAMA DAN ALAMAT</div>
-            <div class="p-2 bg-dark rounded border border-secondary mb-3" style="font-size: 0.85rem;">
-                <div class="mb-1">Nama: <b id="util-nama" class="text-success">-</b></div>
-                <div class="mb-1">Alamat: <b id="util-alamat" class="text-success">-</b></div>
-                <div>Detail: <b id="util-detail" class="text-success">-</b></div>
-            </div>
-            <div class="d-flex justify-content-between">
-                <button class="btn-util w-50 me-1" onclick="generateRandomData()">GENERATE BARU</button>
-                <button class="btn-util w-50 ms-1 btn-success-custom" onclick="copyAlamatData()">COPY DATA</button>
-            </div>
-        </div>
-        
-    </div>
-
-    <audio id="notif-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
-
-    <script>
-        const API_BASE = "https://aihomestore.alazam04.workers.dev/api";
-        let checkTimer = null;
-
-        function toggleSmsTarget() {
-            const srv = document.getElementById('serverSelect').value;
-            document.getElementById('sniperBox').style.display = (srv === 'smscode') ? 'block' : 'none';
-        }
-
-        window.onload = () => {
-            if(localStorage.getItem('order_id')) {
-                document.getElementById('display-id').innerText = localStorage.getItem('order_id');
-                document.getElementById('display-number').innerText = localStorage.getItem('phone');
-                startPolling();
-            }
-            if(localStorage.getItem('pref_server')) {
-                document.getElementById('serverSelect').value = localStorage.getItem('pref_server');
-                toggleSmsTarget();
-            }
-            if(localStorage.getItem('pref_op')) document.getElementById('operatorSelect').value = localStorage.getItem('pref_op');
-        };
-
-        async function orderNumber() {
-            const server = document.getElementById('serverSelect').value;
-            const operator = document.getElementById('operatorSelect').value;
-            const targetPrice = document.getElementById('targetPrice').value;
-            const btn = document.getElementById('btnOrder');
-
-            localStorage.setItem('pref_server', server);
-            localStorage.setItem('pref_op', operator);
-
-            btn.disabled = true; btn.innerText = "Membidik Target...";
-            document.getElementById('display-number').innerText = "Ordering...";
-
-            try {
-                const res = await fetch(`${API_BASE}/order?server=${server}&operator=${operator}&targetprice=${targetPrice}`);
-                const data = await res.json();
-
-                if (data.id && data.number) {
-                    localStorage.setItem('order_id', data.id); localStorage.setItem('phone', data.number);
-                    document.getElementById('display-id').innerText = data.id; document.getElementById('display-number').innerText = data.number;
-                    document.getElementById('otp-box').innerText = "WAITING"; document.getElementById('otp-box').style.color = "#fbbf24";
-                    document.getElementById('status-desc').innerText = "Menunggu SMS...";
-                    startPolling();
-                } else {
-                    alert("Info: " + (data.error || "Gagal"));
-                    document.getElementById('display-number').innerText = "Ready...";
-                }
-            } catch (e) { alert("Error Worker"); } finally {
-                btn.disabled = false; btn.innerText = "AMBIL NOMOR SHOPEE";
-            }
-        }
-
-        function startPolling() { if(checkTimer) clearInterval(checkTimer); checkTimer = setInterval(checkOTP, 5000); }
-
-        async function checkOTP() {
-            const id = localStorage.getItem('order_id'); const server = localStorage.getItem('pref_server');
-            if(!id) return;
-            try {
-                const res = await fetch(`${API_BASE}/check?id=${id}&server=${server}`);
-                const data = await res.json();
-                if (data.otp && data.otp !== "-") {
-                    document.getElementById('otp-box').innerText = data.otp;
-                    if (data.otp.startsWith("ERR:") || data.otp.startsWith("STAT:")) { document.getElementById('otp-box').style.color = "#ef4444"; } 
-                    else {
-                        document.getElementById('otp-box').style.color = "#4ade80"; document.getElementById('status-desc').innerText = "OTP MASUK!";
-                        document.getElementById('notif-sound').play(); navigator.clipboard.writeText(data.otp); clearInterval(checkTimer);
-                    }
-                }
-            } catch (e) {}
-        }
-
-        function clearData() { localStorage.clear(); location.reload(); }
-        
-        function copyNumber() { 
-            const num = document.getElementById('display-number').innerText; 
-            if(num && num !== "Ready...") { navigator.clipboard.writeText(num); } 
-        }
-
-        function generateRandomData() {
-            const names = [
-                "Aditya Pratama", "Budi Santoso", "Cahyo Wibowo", "Dedi Setiawan", "Eko Nugroho", "Fajar Hidayat", "Gilang Saputra", "Hendra Gunawan", "Irfan Hakim", "Joko Susanto",
-                "Kevin Wijaya", "Lukman Maulana", "Muhammad Akbar", "Nur Rahman", "Oki Saputro", "Putra Ramadhan", "Rizky Fauzi", "Surya Lesmana", "Tri Haryanto", "Udin Syahputra",
-                "Wahyu Kurniawan", "Yoga Purnomo", "Zainal Arifin", "Andi Kusuma", "Bambang Sugiarto", "Candra Wijaya", "Darmawan Syah", "Erwin Susilo", "Ferry Irawan", "Gatot Subroto",
-                "Hadi Pranoto", "Indra Lesmana", "Jamal Umar", "Kiki Setiawan", "Lutfi Hasan", "Maman Abdurrahman", "Nana Sudjana", "Oman Rachman", "Panji Pradana", "Qori Mubarok",
-                "Rendi Pangalila", "Sandi Wardana", "Tomi Prasetyo", "Umar Wirawan", "Vino Pratama", "Wawan Juniarso", "Yudi Latif", "Zaki Iskandar", "Ari Hermawan", "Bima Arya",
-                "Ayu Lestari", "Bunga Jelita", "Citra Kirana", "Dian Sastro", "Eka Putri", "Fitri Ani", "Gita Savitri", "Hani Amira", "Intan Nuraini", "Jihan Mutiara",
-                "Kartika Sari", "Laras Maharani", "Maya Septha", "Nita Natalia", "Olivia Rahma", "Putri Titian", "Rina Gunawan", "Sari Puspita", "Tari Sandra", "Utami Handayani",
-                "Vina Amelia", "Wulan Sari", "Yuni Rahayu", "Zara Anisa", "Amalia Rizki", "Bella Pertiwi", "Chika Kirana", "Dinda Mutiara", "Elsa Syarief", "Farah Dina",
-                "Gisel Kirana", "Hilda Vitria", "Indah Permata", "Julia Pratiwi", "Karin Novilda", "Luna Wijaya", "Mira Lesmana", "Nia Ramadhani", "Olla Jelita", "Paula Indah",
-                "Qory Rahmawati", "Rossa Roslaina", "Sissy Kirana", "Tasya Kamila", "Ussy Sulistia", "Vanesha Ayu", "Wanda Hamidah", "Yasmine Nabila", "Zaskia Mecca", "Mawar Eva"
-            ]; 
-            const streets = ["Jl. Merdeka No. 10", "Jl. Melati Blok C", "Perum Cahaya Indah No. 5", "Jl. Gajah Mada No. 14"]; 
-            const cities = ["Jakarta (10110)", "Bandung (40111)", "Surabaya (60111)", "Tangerang (15111)"];
-            document.getElementById('util-nama').innerText = names[Math.floor(Math.random() * names.length)]; 
-            document.getElementById('util-alamat').innerText = streets[Math.floor(Math.random() * streets.length)]; 
-            document.getElementById('util-detail').innerText = cities[Math.floor(Math.random() * cities.length)];
-        }
-
-        // COPY DATA ALAMAT SEKALIGUS
-        function copyAlamatData() {
-            const nama = document.getElementById('util-nama').innerText;
-            const alamat = document.getElementById('util-alamat').innerText;
-            const detail = document.getElementById('util-detail').innerText;
-            
-            if(nama === "-") {
-                return;
-            }
-
-            const textToCopy = `${nama}\n${alamat}\n${detail}`;
-            navigator.clipboard.writeText(textToCopy);
-        }
-    </script>
-</body>
-    </html>
-<option value="hero">🚀 HERO SMS</option>
                         <option value="rumah">🏠 RUMAH OTP</option>
                         <option value="smscode">⚡ SMSCODE.GG</option>
                     </select>
@@ -348,7 +183,7 @@
         
         function copyNumber() { 
             const num = document.getElementById('display-number').innerText; 
-            if(num && num !== "Ready...") { navigator.clipboard.writeText(num); alert("Nomor HP disalin!"); } 
+            if(num && num !== "Ready...") { navigator.clipboard.writeText(num); } 
         }
 
         function generateRandomData() {
@@ -367,13 +202,11 @@
             const detail = document.getElementById('util-detail').innerText;
             
             if(nama === "-") {
-                alert("Klik tombol GENERATE BARU terlebih dahulu!");
                 return;
             }
 
             const textToCopy = `${nama}\n${alamat}\n${detail}`;
             navigator.clipboard.writeText(textToCopy);
-            alert("Data Nama & Alamat berhasil disalin!");
         }
     </script>
 </body>
