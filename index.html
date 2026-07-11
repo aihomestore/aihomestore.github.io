@@ -64,11 +64,18 @@
                         <option value="indosat">INDOSAT</option>
                         <option value="telkomsel">TELKOMSEL</option>
                     </select>
-                </div>
-                
+                </div> 
                 <div class="col-12 mt-2" id="sniperBox" style="display:none;">
-                    <input type="number" id="targetPrice" class="form-control" placeholder="Bidik Harga SMSCode (Misal: 115) - Opsional">
-                </div>
+    <select id="targetPrice" class="form-select">
+        <option value="">-- Tanpa Bidik Harga (Bebas) --</option>
+        <option value="110">Harga 110</option>
+        <option value="115">Harga 115 (Rekomendasi)</option>
+        <option value="120">Harga 120</option>
+        <option value="130">Harga 130</option>
+        <option value="150">Harga 150</option>
+        <option value="200">Harga 200 (Prioritas Tinggi)</option>
+    </select>
+</div>
             </div>
 
             <button class="btn-order" onclick="orderNumber()" id="btnOrder">AMBIL NOMOR SHOPEE</button>
