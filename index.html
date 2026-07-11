@@ -170,25 +170,35 @@
 
             btn.disabled = true; btn.innerText = "MEMBIDIK TARGET...";
             document.getElementById('display-number').innerText = "Ordering...";
+            document.getElementById('display-number').style.color = "var(--accent-primary)";
+            document.getElementById('status-desc').innerText = "Menunggu respons server...";
+            document.getElementById('status-desc').style.color = "var(--text-muted)";
 
             try {
-                // Pastikan URL API backend Anda (aihomestore.alazam04.workers.dev) membaca parameter targetprice ini.
                 const res = await fetch(`${API_BASE}/order?server=${server}&operator=${operator}&targetprice=${targetPrice}`);
                 const data = await res.json();
 
                 if (data.id && data.number) {
                     localStorage.setItem('order_id', data.id); localStorage.setItem('phone', data.number);
-                    document.getElementById('display-id').innerText = data.id; document.getElementById('display-number').innerText = data.number;
-                    document.getElementById('otp-box').innerText = "WAITING"; document.getElementById('otp-box').style.color = "#0d9488";
+                    document.getElementById('display-id').innerText = data.id; 
+                    document.getElementById('display-number').innerText = data.number;
+                    document.getElementById('display-number').style.color = "var(--accent-primary)";
+                    document.getElementById('otp-box').innerText = "WAITING"; 
+                    document.getElementById('otp-box').style.color = "#0d9488";
                     document.getElementById('status-desc').innerText = "Menunggu SMS Masuk...";
                     startPolling();
                 } else {
-                    document.getElementById('display-number').innerText = "Gagal (Cek Harga/Stok)";
-                    console.log("Error dari server:", data);
+                    let pesanError = data.error || data.msg || data.message || JSON.stringify(data);
+                    document.getElementById('display-number').innerText = "GAGAL ORDER";
+                    document.getElementById('display-number').style.color = "#ef4444";
+                    document.getElementById('status-desc').innerText = "Error: " + pesanError;
+                    document.getElementById('status-desc').style.color = "#ef4444";
                 }
             } catch (e) { 
-                document.getElementById('display-number').innerText = "Error Jaringan/API";
-                console.error("Fetch error:", e);
+                document.getElementById('display-number').innerText = "Error Worker";
+                document.getElementById('display-number').style.color = "#ef4444";
+                document.getElementById('status-desc').innerText = "Gagal terhubung ke Cloudflare Worker";
+                document.getElementById('status-desc').style.color = "#ef4444";
             } finally {
                 btn.disabled = false; btn.innerText = "AMBIL NOMOR SHOPEE";
             }
@@ -225,7 +235,7 @@
         
         function copyNumber(btn) { 
             const num = document.getElementById('display-number').innerText; 
-            if(num && num !== "Ready..." && num !== "Gagal (Cek Harga/Stok)") { 
+            if(num && num !== "Ready..." && num !== "GAGAL ORDER" && num !== "Error Worker") { 
                 navigator.clipboard.writeText(num); 
                 buttonFeedback(btn, "TERSALIN!");
             } 
@@ -282,5 +292,5 @@
         }
     </script>
 </body>
-                            </html>
+    </html>
     
