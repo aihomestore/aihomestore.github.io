@@ -17,7 +17,7 @@
         .otp-display { background-color: #0f172a; border: 2px dashed #334155; border-radius: 15px; padding: 25px; text-align: center; margin-top: 20px; }
         #otp-box { font-size: 2.8rem; font-weight: 800; color: #fbbf24; letter-spacing: 5px; }
         .data-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; }
-        .btn-util { background-color: #334155; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; }
+        .btn-util { background-color: #334155; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; transition: 0.2s; }
         .btn-success-custom { background-color: #059669; color: white; }
     </style>
 </head>
@@ -25,6 +25,7 @@
 
     <div class="container" style="max-width: 500px;">
         
+        <!-- PANEL OTP -->
         <div class="main-card">
             <div class="section-title">🚀 SHOPEE OTP ENGINE</div>
             
@@ -62,11 +63,12 @@
             </div>
 
             <div class="d-flex justify-content-between mt-3">
-                <button class="btn-util w-50 me-1 btn-success-custom" onclick="copyNumber()">COPY NOMOR</button>
-                <button class="btn-util w-50 ms-1" onclick="clearData()">CLEAR DATA</button>
+                <button class="btn-util w-50 me-1 btn-success-custom" onclick="copyNumber(this)">COPY NOMOR</button>
+                <button class="btn-util w-50 ms-1" onclick="clearData(this)">CLEAR DATA</button>
             </div>
         </div>
 
+        <!-- PANEL NAMA DAN ALAMAT -->
         <div class="main-card">
             <div class="section-title">🏠 NAMA DAN ALAMAT</div>
             <div class="p-2 bg-dark rounded border border-secondary mb-3" style="font-size: 0.85rem;">
@@ -75,8 +77,8 @@
                 <div>Detail: <b id="util-detail" class="text-success">-</b></div>
             </div>
             <div class="d-flex justify-content-between">
-                <button class="btn-util w-50 me-1" onclick="generateRandomData()">GENERATE BARU</button>
-                <button class="btn-util w-50 ms-1 btn-success-custom" onclick="copyAlamatData()">COPY DATA</button>
+                <button class="btn-util w-50 me-1" onclick="generateRandomData(this)">GENERATE BARU</button>
+                <button class="btn-util w-50 ms-1 btn-success-custom" onclick="copyAlamatData(this)">COPY DATA</button>
             </div>
         </div>
         
@@ -87,6 +89,18 @@
     <script>
         const API_BASE = "https://aihomestore.alazam04.workers.dev/api";
         let checkTimer = null;
+
+        // FUNGSI UNTUK MENGUBAH TEKS TOMBOL SEBAGAI FEEDBACK KLIK
+        function buttonFeedback(btnElement, tempText) {
+            if (!btnElement) return;
+            const originalText = btnElement.innerText;
+            btnElement.innerText = tempText;
+            btnElement.style.opacity = "0.8";
+            setTimeout(() => {
+                btnElement.innerText = originalText;
+                btnElement.style.opacity = "1";
+            }, 1500);
+        }
 
         function toggleSmsTarget() {
             const srv = document.getElementById('serverSelect').value;
@@ -115,7 +129,7 @@
             localStorage.setItem('pref_server', server);
             localStorage.setItem('pref_op', operator);
 
-            btn.disabled = true; btn.innerText = "Membidik Target...";
+            btn.disabled = true; btn.innerText = "MEMBIDIK TARGET...";
             document.getElementById('display-number').innerText = "Ordering...";
 
             try {
@@ -129,10 +143,9 @@
                     document.getElementById('status-desc').innerText = "Menunggu SMS...";
                     startPolling();
                 } else {
-                    alert("Info: " + (data.error || "Gagal"));
                     document.getElementById('display-number').innerText = "Ready...";
                 }
-            } catch (e) { alert("Error Worker"); } finally {
+            } catch (e) {  } finally {
                 btn.disabled = false; btn.innerText = "AMBIL NOMOR SHOPEE";
             }
         }
@@ -147,44 +160,70 @@
                 const data = await res.json();
                 if (data.otp && data.otp !== "-") {
                     document.getElementById('otp-box').innerText = data.otp;
-                    if (data.otp.startsWith("ERR:") || data.otp.startsWith("STAT:")) { document.getElementById('otp-box').style.color = "#ef4444"; } 
+                    if (data.otp.startsWith("ERR:") || data.otp.startsWith("STAT:")) { 
+                        document.getElementById('otp-box').style.color = "#ef4444"; 
+                    } 
                     else {
-                        document.getElementById('otp-box').style.color = "#4ade80"; document.getElementById('status-desc').innerText = "OTP MASUK!";
-                        document.getElementById('notif-sound').play(); navigator.clipboard.writeText(data.otp); clearInterval(checkTimer);
+                        document.getElementById('otp-box').style.color = "#4ade80"; 
+                        document.getElementById('status-desc').innerText = "OTP MASUK!";
+                        document.getElementById('notif-sound').play(); 
+                        // Auto-copy telah dihapus
+                        clearInterval(checkTimer);
                     }
                 }
             } catch (e) {}
         }
 
-        function clearData() { localStorage.clear(); location.reload(); }
+        function clearData(btn) { 
+            buttonFeedback(btn, "MENGHAPUS...");
+            localStorage.clear(); 
+            setTimeout(() => { location.reload(); }, 500); 
+        }
         
-        function copyNumber() { 
+        function copyNumber(btn) { 
             const num = document.getElementById('display-number').innerText; 
-            if(num && num !== "Ready...") { navigator.clipboard.writeText(num); } 
+            if(num && num !== "Ready...") { 
+                navigator.clipboard.writeText(num); 
+                buttonFeedback(btn, "TERSALIN!");
+            } 
         }
 
-        function generateRandomData() {
-            const names = [
-                "Aditya Pratama", "Budi Santoso", "Cahyo Wibowo", "Dedi Setiawan", "Eko Nugroho", "Fajar Hidayat", "Gilang Saputra", "Hendra Gunawan", "Irfan Hakim", "Joko Susanto",
-                "Kevin Wijaya", "Lukman Maulana", "Muhammad Akbar", "Nur Rahman", "Oki Saputro", "Putra Ramadhan", "Rizky Fauzi", "Surya Lesmana", "Tri Haryanto", "Udin Syahputra",
-                "Wahyu Kurniawan", "Yoga Purnomo", "Zainal Arifin", "Andi Kusuma", "Bambang Sugiarto", "Candra Wijaya", "Darmawan Syah", "Erwin Susilo", "Ferry Irawan", "Gatot Subroto",
-                "Hadi Pranoto", "Indra Lesmana", "Jamal Umar", "Kiki Setiawan", "Lutfi Hasan", "Maman Abdurrahman", "Nana Sudjana", "Oman Rachman", "Panji Pradana", "Qori Mubarok",
-                "Rendi Pangalila", "Sandi Wardana", "Tomi Prasetyo", "Umar Wirawan", "Vino Pratama", "Wawan Juniarso", "Yudi Latif", "Zaki Iskandar", "Ari Hermawan", "Bima Arya",
-                "Ayu Lestari", "Bunga Jelita", "Citra Kirana", "Dian Sastro", "Eka Putri", "Fitri Ani", "Gita Savitri", "Hani Amira", "Intan Nuraini", "Jihan Mutiara",
-                "Kartika Sari", "Laras Maharani", "Maya Septha", "Nita Natalia", "Olivia Rahma", "Putri Titian", "Rina Gunawan", "Sari Puspita", "Tari Sandra", "Utami Handayani",
-                "Vina Amelia", "Wulan Sari", "Yuni Rahayu", "Zara Anisa", "Amalia Rizki", "Bella Pertiwi", "Chika Kirana", "Dinda Mutiara", "Elsa Syarief", "Farah Dina",
-                "Gisel Kirana", "Hilda Vitria", "Indah Permata", "Julia Pratiwi", "Karin Novilda", "Luna Wijaya", "Mira Lesmana", "Nia Ramadhani", "Olla Jelita", "Paula Indah",
-                "Qory Rahmawati", "Rossa Roslaina", "Sissy Kirana", "Tasya Kamila", "Ussy Sulistia", "Vanesha Ayu", "Wanda Hamidah", "Yasmine Nabila", "Zaskia Mecca", "Mawar Eva"
+        function generateRandomData(btn) {
+            const firstNames = [
+                "Aditya", "Budi", "Cahyo", "Deni", "Eko", "Fajar", "Gilang", "Hendra", "Irfan", "Joko", 
+                "Kevin", "Lukman", "Muhamad", "Nur", "Oki", "Putra", "Rizky", "Surya", "Tri", "Udin", 
+                "Wahyu", "Yoga", "Zainal", "Andi", "Bambang", "Candra", "Darmawan", "Erwin", "Ferry", "Ayu", 
+                "Bunga", "Citra", "Dian", "Eka", "Fitri", "Gita", "Hani", "Intan", "Jihan", "Maya"
+            ];
+            
+            const lastNames = [
+                "Pratama", "Santoso", "Wibowo", "Setiawan", "Nugroho", "Hidayat", "Saputra", "Gunawan", "Hakim", "Susanto", 
+                "Wijaya", "Maulana", "Akbar", "Rahman", "Ramadhan", "Fauzi", "Lesmana", "Haryanto", "Syahputra", "Kurniawan", 
+                "Purnomo", "Arifin", "Kusuma", "Sugiarto", "Syah", "Susilo", "Lestari", "Jelita", "Kirana", "Sastro", 
+                "Putri", "Savitri", "Amira", "Nuraini", "Mutiara", "Maharani"
+            ];
+
+            const streets = [
+                "Jl. Merdeka No. 10", "Jl. Melati Blok C", "Perum Cahaya Indah No. 5", "Jl. Gajah Mada No. 14", 
+                "Jl. Jendral Sudirman No. 8", "Jl. Diponegoro Blok B", "Komp. Makmur Jaya No. 22", "Jl. Pahlawan No. 45"
             ]; 
-            const streets = ["Jl. Merdeka No. 10", "Jl. Melati Blok C", "Perum Cahaya Indah No. 5", "Jl. Gajah Mada No. 14"]; 
-            const cities = ["Jakarta (10110)", "Bandung (40111)", "Surabaya (60111)", "Tangerang (15111)"];
-            document.getElementById('util-nama').innerText = names[Math.floor(Math.random() * names.length)]; 
+            const cities = [
+                "Jakarta (10110)", "Bandung (40111)", "Surabaya (60111)", "Tangerang (15111)", 
+                "Semarang (50111)", "Malang (65111)", "Bekasi (17111)", "Depok (16411)"
+            ];
+
+            const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+            const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+            const fullName = `${randomFirstName} ${randomLastName}`;
+
+            document.getElementById('util-nama').innerText = fullName;
             document.getElementById('util-alamat').innerText = streets[Math.floor(Math.random() * streets.length)]; 
             document.getElementById('util-detail').innerText = cities[Math.floor(Math.random() * cities.length)];
+
+            buttonFeedback(btn, "GENERATED!");
         }
 
-        // COPY DATA ALAMAT SEKALIGUS
-        function copyAlamatData() {
+        function copyAlamatData(btn) {
             const nama = document.getElementById('util-nama').innerText;
             const alamat = document.getElementById('util-alamat').innerText;
             const detail = document.getElementById('util-detail').innerText;
@@ -195,8 +234,9 @@
 
             const textToCopy = `${nama}\n${alamat}\n${detail}`;
             navigator.clipboard.writeText(textToCopy);
+            
+            buttonFeedback(btn, "TERSALIN!");
         }
     </script>
 </body>
-    </html>
-    
+</html>
