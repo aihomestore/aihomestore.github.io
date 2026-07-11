@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
     <style>
         :root { 
-            --bg-color: #f0f9ff; /* Biru langit sangat muda (sejuk) */
-            --card-bg: #ffffff; /* Putih bersih */
-            --accent-primary: #0ea5e9; /* Biru cerah (Sky) */
-            --accent-success: #10b981; /* Hijau segar (Emerald) */
-            --text-main: #334155; /* Abu-abu gelap/Slate */
+            --bg-color: #f0f9ff;
+            --card-bg: #ffffff;
+            --accent-primary: #0ea5e9;
+            --accent-success: #10b981;
+            --text-main: #334155;
             --text-muted: #64748b; 
             --border-color: #e2e8f0;
         }
@@ -59,27 +59,33 @@
                     </select>
                 </div>
                 <div class="col-6">
+                    <!-- Pastikan memilih TERMURAH (Any) saat tes SMSCode -->
                     <select id="operatorSelect" class="form-select">
                         <option value="any">TERMURAH</option>
                         <option value="indosat">INDOSAT</option>
                         <option value="telkomsel">TELKOMSEL</option>
                     </select>
-                </div> 
+                </div>
+                
                 <div class="col-12 mt-2" id="sniperBox" style="display:none;">
-    <select id="targetPrice" class="form-select">
-        <option value="">-- Tanpa Bidik (Otomatis Termurah) --</option>
-        
-        <!-- Sesuaikan value="" dengan harga riil di web smscode.gg -->
-        <option value="130">Shopee - Rp 130</option>
-        <option value="140">Shopee - Rp 140</option>
-        <option value="150">Shopee - Rp 150</option>
-        <option value="160">Shopee - Rp 160</option>
-        <option value="180">Shopee - Rp 180</option>
-        <option value="200">Shopee - Rp 200</option>
-        <option value="220">Shopee - Rp 220</option>
-        <option value="250">Shopee - Rp 250</option>
-    </select>
-</div>
+                    <select id="targetPrice" class="form-select">
+                        <option value="">-- Tanpa Bidik (Otomatis Termurah) --</option>
+                        <option value="200">Shopee - Rp 200</option>
+                        <option value="438">Shopee - Rp 438</option>
+                        <option value="458">Shopee - Rp 458</option>
+                        <option value="475">Shopee - Rp 475</option>
+                        <option value="477">Shopee - Rp 477</option>
+                        <option value="490">Shopee - Rp 490</option>
+                        <option value="504">Shopee - Rp 504</option>
+                        <option value="508">Shopee - Rp 508</option>
+                        <option value="510">Shopee - Rp 510</option>
+                        <option value="512">Shopee - Rp 512</option>
+                        <option value="514">Shopee - Rp 514</option>
+                        <option value="516">Shopee - Rp 516</option>
+                        <option value="519">Shopee - Rp 519</option>
+                        <option value="525">Shopee - Rp 525</option>
+                    </select>
+                </div>
             </div>
 
             <button class="btn-order" onclick="orderNumber()" id="btnOrder">AMBIL NOMOR SHOPEE</button>
@@ -124,7 +130,6 @@
         const API_BASE = "https://aihomestore.alazam04.workers.dev/api";
         let checkTimer = null;
 
-        // FUNGSI UNTUK MENGUBAH TEKS TOMBOL SEBAGAI FEEDBACK KLIK
         function buttonFeedback(btnElement, tempText) {
             if (!btnElement) return;
             const originalText = btnElement.innerText;
@@ -157,7 +162,7 @@
         async function orderNumber() {
             const server = document.getElementById('serverSelect').value;
             const operator = document.getElementById('operatorSelect').value;
-            const targetPrice = document.getElementById('targetPrice').value;
+            const targetPrice = document.getElementById('targetPrice') ? document.getElementById('targetPrice').value : "";
             const btn = document.getElementById('btnOrder');
 
             localStorage.setItem('pref_server', server);
@@ -167,6 +172,7 @@
             document.getElementById('display-number').innerText = "Ordering...";
 
             try {
+                // Pastikan URL API backend Anda (aihomestore.alazam04.workers.dev) membaca parameter targetprice ini.
                 const res = await fetch(`${API_BASE}/order?server=${server}&operator=${operator}&targetprice=${targetPrice}`);
                 const data = await res.json();
 
@@ -177,9 +183,13 @@
                     document.getElementById('status-desc').innerText = "Menunggu SMS Masuk...";
                     startPolling();
                 } else {
-                    document.getElementById('display-number').innerText = "Ready...";
+                    document.getElementById('display-number').innerText = "Gagal (Cek Harga/Stok)";
+                    console.log("Error dari server:", data);
                 }
-            } catch (e) {  } finally {
+            } catch (e) { 
+                document.getElementById('display-number').innerText = "Error Jaringan/API";
+                console.error("Fetch error:", e);
+            } finally {
                 btn.disabled = false; btn.innerText = "AMBIL NOMOR SHOPEE";
             }
         }
@@ -215,7 +225,7 @@
         
         function copyNumber(btn) { 
             const num = document.getElementById('display-number').innerText; 
-            if(num && num !== "Ready...") { 
+            if(num && num !== "Ready..." && num !== "Gagal (Cek Harga/Stok)") { 
                 navigator.clipboard.writeText(num); 
                 buttonFeedback(btn, "TERSALIN!");
             } 
@@ -272,5 +282,5 @@
         }
     </script>
 </body>
-    </html>
+                            </html>
     
