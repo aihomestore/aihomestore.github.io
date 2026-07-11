@@ -19,9 +19,6 @@
         .data-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; }
         .btn-util { background-color: #334155; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; }
         .btn-success-custom { background-color: #059669; color: white; }
-        .link-item { background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px 15px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .link-name { font-size: 0.75rem; font-weight: bold; color: #94a3b8; text-transform: uppercase;}
-        .btn-copy-link { color: #60a5fa; border: 1px solid #3b82f6; font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -83,26 +80,6 @@
             </div>
         </div>
         
-        <div class="main-card">
-            <div class="section-title">🔗 LINK ORDER SHOPEE</div>
-            <div class="link-item"><span class="link-name">AWAW 1</span><a href="https://s.shopee.co.id/6VKFY7rZoL" target="_blank" class="btn-copy-link">BUKA</a></div>
-            <div class="link-item"><span class="link-name">AWAW 2</span><a href="https://s.shopee.co.id/6px5wm8CN6" target="_blank" class="btn-copy-link">BUKA</a></div>
-            <div class="link-item"><span class="link-name">AWAW 3</span><a href="https://s.shopee.co.id/901aWmbQPp" target="_blank" class="btn-copy-link">BUKA</a></div>
-            <div class="link-item"><span class="link-name">AWAW 4</span><a href="https://s.shopee.co.id/7ppd8fwWIc" target="_blank" class="btn-copy-link">BUKA</a></div>
-            
-            <div class="link-item"><span class="link-name">WHITE CYBER</span><a href="https://s.shopee.co.id/9fHHK4KU73" target="_blank" class="btn-copy-link">BUKA</a></div>
-            <div class="link-item"><span class="link-name">ALFA DIGITAL</span><a href="https://s.shopee.co.id/4qC1ZEp4uu" target="_blank" class="btn-copy-link">BUKA</a></div>
-            <div class="link-item"><span class="link-name">SRIBUFOLLS</span><a href="https://s.shopee.co.id/3Vgdyp7e4p" target="_blank" class="btn-copy-link">BUKA</a></div>
-            <div class="link-item"><span class="link-name">HELENA STUFF</span><a href="https://s.shopee.co.id/AADXv6H81t" target="_blank" class="btn-copy-link">BUKA</a></div>
-            <div class="link-item"><span class="link-name">SECRET PANEL</span><a href="https://s.shopee.co.id/4AwKm7hE75" target="_blank" class="btn-copy-link">BUKA</a></div>
-            <div class="link-item"><span class="link-name">PROMETIXPANEL</span><a href="https://s.shopee.co.id/9KeQve7UK9" target="_blank" class="btn-copy-link">BUKA</a></div>
-            
-            <div class="link-item"><span class="link-name">YOAKE 1</span><a href="https://s.shopee.co.id/8fOk8T99r5" target="_blank" class="btn-copy-link">BUKA</a></div>
-            <div class="link-item"><span class="link-name">YOAKE 2</span><a href="https://s.shopee.co.id/3LNDmhKKrw" target="_blank" class="btn-copy-link">BUKA</a></div>
-            
-            <div class="link-item"><span class="link-name">MAMA WHITE CYBER</span><a href="https://s.shopee.co.id/2g7J598NmS" target="_blank" class="btn-copy-link">BUKA</a></div>
-        </div>
-
     </div>
 
     <audio id="notif-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
@@ -187,7 +164,18 @@
         }
 
         function generateRandomData() {
-            const names = ["Budi Santoso", "Siti Aminah", "Andi Wijaya", "Maya Wibowo", "Rian Hidayat", "Dewi Lestari"]; 
+            const names = [
+                "Aditya Pratama", "Budi Santoso", "Cahyo Wibowo", "Dedi Setiawan", "Eko Nugroho", "Fajar Hidayat", "Gilang Saputra", "Hendra Gunawan", "Irfan Hakim", "Joko Susanto",
+                "Kevin Wijaya", "Lukman Maulana", "Muhammad Akbar", "Nur Rahman", "Oki Saputro", "Putra Ramadhan", "Rizky Fauzi", "Surya Lesmana", "Tri Haryanto", "Udin Syahputra",
+                "Wahyu Kurniawan", "Yoga Purnomo", "Zainal Arifin", "Andi Kusuma", "Bambang Sugiarto", "Candra Wijaya", "Darmawan Syah", "Erwin Susilo", "Ferry Irawan", "Gatot Subroto",
+                "Hadi Pranoto", "Indra Lesmana", "Jamal Umar", "Kiki Setiawan", "Lutfi Hasan", "Maman Abdurrahman", "Nana Sudjana", "Oman Rachman", "Panji Pradana", "Qori Mubarok",
+                "Rendi Pangalila", "Sandi Wardana", "Tomi Prasetyo", "Umar Wirawan", "Vino Pratama", "Wawan Juniarso", "Yudi Latif", "Zaki Iskandar", "Ari Hermawan", "Bima Arya",
+                "Ayu Lestari", "Bunga Jelita", "Citra Kirana", "Dian Sastro", "Eka Putri", "Fitri Ani", "Gita Savitri", "Hani Amira", "Intan Nuraini", "Jihan Mutiara",
+                "Kartika Sari", "Laras Maharani", "Maya Septha", "Nita Natalia", "Olivia Rahma", "Putri Titian", "Rina Gunawan", "Sari Puspita", "Tari Sandra", "Utami Handayani",
+                "Vina Amelia", "Wulan Sari", "Yuni Rahayu", "Zara Anisa", "Amalia Rizki", "Bella Pertiwi", "Chika Kirana", "Dinda Mutiara", "Elsa Syarief", "Farah Dina",
+                "Gisel Kirana", "Hilda Vitria", "Indah Permata", "Julia Pratiwi", "Karin Novilda", "Luna Wijaya", "Mira Lesmana", "Nia Ramadhani", "Olla Jelita", "Paula Indah",
+                "Qory Rahmawati", "Rossa Roslaina", "Sissy Kirana", "Tasya Kamila", "Ussy Sulistia", "Vanesha Ayu", "Wanda Hamidah", "Yasmine Nabila", "Zaskia Mecca", "Mawar Eva"
+            ]; 
             const streets = ["Jl. Merdeka No. 10", "Jl. Melati Blok C", "Perum Cahaya Indah No. 5", "Jl. Gajah Mada No. 14"]; 
             const cities = ["Jakarta (10110)", "Bandung (40111)", "Surabaya (60111)", "Tangerang (15111)"];
             document.getElementById('util-nama').innerText = names[Math.floor(Math.random() * names.length)]; 
@@ -195,7 +183,7 @@
             document.getElementById('util-detail').innerText = cities[Math.floor(Math.random() * cities.length)];
         }
 
-        // FITUR BARU: COPY DATA ALAMAT SEKALIGUS
+        // COPY DATA ALAMAT SEKALIGUS
         function copyAlamatData() {
             const nama = document.getElementById('util-nama').innerText;
             const alamat = document.getElementById('util-alamat').innerText;
@@ -210,4 +198,5 @@
         }
     </script>
 </body>
-</html>
+    </html>
+    
