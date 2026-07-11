@@ -12,31 +12,39 @@
             --card-bg: #ffffff;
             --accent-primary: #0ea5e9;
             --accent-success: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-danger: #ef4444;
             --text-main: #334155;
             --text-muted: #64748b; 
             --border-color: #e2e8f0;
         }
         body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Segoe UI', Tahoma, sans-serif; padding: 15px; }
         .main-card { background-color: var(--card-bg); border-radius: 15px; padding: 25px; border: 1px solid var(--border-color); margin-bottom: 20px; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.05); }
-        .section-title { font-size: 0.95rem; font-weight: 800; color: var(--accent-primary); border-left: 4px solid var(--accent-primary); padding-left: 12px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* Flexbox untuk menyejajarkan Title dan Saldo */
+        .title-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .section-title { font-size: 0.95rem; font-weight: 800; color: var(--accent-primary); border-left: 4px solid var(--accent-primary); padding-left: 12px; margin-bottom: 0; text-transform: uppercase; letter-spacing: 0.5px; }
+        .balance-badge { background-color: #f1f5f9; color: var(--text-main); font-size: 0.75rem; font-weight: 800; padding: 6px 12px; border-radius: 20px; border: 1px solid #cbd5e1; }
+        .balance-badge i { color: #059669; margin-right: 4px; }
         
         .form-select, .form-control { background-color: #f8fafc; border: 1px solid #cbd5e1; color: var(--text-main); border-radius: 10px; font-size: 0.8rem; font-weight: 600; padding: 10px 12px; }
         .form-select:focus, .form-control:focus { background-color: #ffffff; color: var(--text-main); border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15); }
         
         .btn-order { background-color: var(--accent-primary); color: white; font-weight: 800; width: 100%; padding: 14px; border-radius: 12px; border: none; transition: 0.3s; margin-top: 15px; box-shadow: 0 4px 10px rgba(14, 165, 233, 0.25); font-size: 0.9rem; letter-spacing: 0.5px; }
-        .btn-order:hover { background-color: #0284c7; transform: translateY(-1px); box-shadow: 0 6px 12px rgba(14, 165, 233, 0.3); }
+        .btn-order:hover { background-color: #0284c7; }
         
-        .otp-display { background-color: #f0fdfa; border: 2px dashed #5eead4; border-radius: 15px; padding: 25px; text-align: center; margin-top: 25px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-        #otp-box { font-size: 2.8rem; font-weight: 800; color: #0d9488; letter-spacing: 6px; text-shadow: 1px 1px 0px rgba(255,255,255,1); }
+        .btn-auto { background-color: var(--accent-purple); box-shadow: 0 4px 10px rgba(139, 92, 246, 0.25); margin-top: 8px; }
+        .btn-auto:hover { background-color: #7c3aed; }
+        
+        .otp-display { background-color: #f0fdfa; border: 2px dashed #5eead4; border-radius: 15px; padding: 25px; text-align: center; margin-top: 25px; }
+        #otp-box { font-size: 2.8rem; font-weight: 800; color: #0d9488; letter-spacing: 6px; }
         
         .data-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem; align-items: center; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px; }
         .data-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
         .text-secondary { color: var(--text-muted) !important; font-weight: 500; }
         
         .btn-util { background-color: #e2e8f0; color: #475569; border: none; padding: 10px 15px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; transition: 0.2s; }
-        .btn-util:hover { background-color: #cbd5e1; }
-        .btn-success-custom { background-color: var(--accent-success); color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
-        .btn-success-custom:hover { background-color: #059669; color: white; }
+        .btn-success-custom { background-color: var(--accent-success); color: white; }
         
         .data-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; margin-bottom: 20px; font-size: 0.85rem; line-height: 1.6; color: var(--text-muted); }
         .data-box b { color: #0f766e; font-weight: 700; }
@@ -46,9 +54,12 @@
 
     <div class="container" style="max-width: 500px; padding-top: 20px; padding-bottom: 30px;">
         
-        <!-- PANEL OTP -->
         <div class="main-card">
-            <div class="section-title">🚀 SHOPEE OTP ENGINE</div>
+            <div class="title-wrapper">
+                <div class="section-title">🚀 SHOPEE OTP ENGINE</div>
+                <!-- Indikator Saldo -->
+                <div class="balance-badge"><i class="fa-solid fa-wallet"></i> Rp <span id="display-balance">...</span></div>
+            </div>
             
             <div class="row g-2">
                 <div class="col-6">
@@ -59,25 +70,27 @@
                     </select>
                 </div>
                 <div class="col-6">
-                    <!-- Pastikan memilih TERMURAH (Any) saat tes SMSCode -->
                     <select id="operatorSelect" class="form-select">
                         <option value="any">TERMURAH</option>
                         <option value="indosat">INDOSAT</option>
                         <option value="telkomsel">TELKOMSEL</option>
                     </select>
                 </div>
+                
                 <div class="col-12 mt-2" id="sniperBox" style="display:none;">
-    <select id="targetPrice" class="form-select">
-        <option value="max-600">🎯 SNIPER: Asal di bawah Rp 600</option>
-        <option value="max-800">🎯 SNIPER: Asal di bawah Rp 800</option>
-        <option value="max-1000">🎯 SNIPER: Asal di bawah Rp 1.000</option>
-        <option value="438">Bidik Harga Kaku: Rp 438</option>
-        <option value="475">Bidik Harga Kaku: Rp 475</option>
-    </select>
-</div>
+                    <select id="targetPrice" class="form-select">
+                        <option value="max-600">🎯 SNIPER: Asal di bawah Rp 600</option>
+                        <option value="max-800">🎯 SNIPER: Asal di bawah Rp 800</option>
+                        <option value="438">Bidik Harga Kaku: Rp 438</option>
+                        <option value="">-- Tanpa Bidik (Otomatis Termurah) --</option>
+                    </select>
+                </div>
             </div>
 
-            <button class="btn-order" onclick="orderNumber()" id="btnOrder">AMBIL NOMOR SHOPEE</button>
+            <!-- Tombol Manual -->
+            <button class="btn-order" onclick="orderNumber(false)" id="btnOrder">AMBIL NOMOR SHOPEE</button>
+            <!-- Tombol Auto Sniper -->
+            <button class="btn-order btn-auto" onclick="toggleAutoSniper()" id="btnAuto">🤖 MULAI AUTO SNIPER</button>
 
             <div class="mt-4">
                 <div class="data-row"><span class="text-secondary">Order ID</span><span id="display-id" style="font-weight: 700;">-</span></div>
@@ -95,16 +108,13 @@
             </div>
         </div>
 
-        <!-- PANEL NAMA DAN ALAMAT -->
         <div class="main-card">
             <div class="section-title">🏠 NAMA DAN ALAMAT</div>
-            
             <div class="data-box">
                 <div class="mb-1">Nama: <b id="util-nama">-</b></div>
                 <div class="mb-1">Alamat: <b id="util-alamat">-</b></div>
                 <div>Detail: <b id="util-detail">-</b></div>
             </div>
-            
             <div class="d-flex justify-content-between">
                 <button class="btn-util w-50 me-2" onclick="generateRandomData(this)">GENERATE BARU</button>
                 <button class="btn-util w-50 ms-2 btn-success-custom" onclick="copyAlamatData(this)">COPY DATA</button>
@@ -118,6 +128,8 @@
     <script>
         const API_BASE = "https://aihomestore.alazam04.workers.dev/api";
         let checkTimer = null;
+        let autoSniperActive = false;
+        let sniperTimeout = null;
 
         function buttonFeedback(btnElement, tempText) {
             if (!btnElement) return;
@@ -133,6 +145,26 @@
         function toggleSmsTarget() {
             const srv = document.getElementById('serverSelect').value;
             document.getElementById('sniperBox').style.display = (srv === 'smscode') ? 'block' : 'none';
+            // Panggil cek saldo setiap kali ganti server
+            checkBalance();
+        }
+
+        // FUNGSI BARU: CEK SALDO DARI WORKER
+        async function checkBalance() {
+            const server = document.getElementById('serverSelect').value;
+            const balanceEl = document.getElementById('display-balance');
+            balanceEl.innerText = "...";
+            try {
+                const res = await fetch(`${API_BASE}/balance?server=${server}`);
+                const data = await res.json();
+                if(data.balance) {
+                    balanceEl.innerText = data.balance;
+                } else {
+                    balanceEl.innerText = "Error";
+                }
+            } catch (e) {
+                balanceEl.innerText = "Off";
+            }
         }
 
         window.onload = () => {
@@ -144,52 +176,85 @@
             if(localStorage.getItem('pref_server')) {
                 document.getElementById('serverSelect').value = localStorage.getItem('pref_server');
                 toggleSmsTarget();
+            } else {
+                checkBalance(); // Load saldo awal
             }
             if(localStorage.getItem('pref_op')) document.getElementById('operatorSelect').value = localStorage.getItem('pref_op');
         };
 
-        async function orderNumber() {
+        function toggleAutoSniper() {
+            const btnAuto = document.getElementById('btnAuto');
+            const btnOrder = document.getElementById('btnOrder');
+            autoSniperActive = !autoSniperActive;
+            
+            if(autoSniperActive) {
+                btnAuto.innerText = "🛑 HENTIKAN AUTO SNIPER";
+                btnAuto.style.backgroundColor = "var(--accent-danger)";
+                btnOrder.disabled = true;
+                orderNumber(true); 
+            } else {
+                btnAuto.innerText = "🤖 MULAI AUTO SNIPER";
+                btnAuto.style.backgroundColor = "var(--accent-purple)";
+                btnOrder.disabled = false;
+                clearTimeout(sniperTimeout);
+                document.getElementById('status-desc').innerText = "Auto Sniper Dihentikan.";
+            }
+        }
+
+        async function orderNumber(isAuto = false) {
             const server = document.getElementById('serverSelect').value;
             const operator = document.getElementById('operatorSelect').value;
             const targetPrice = document.getElementById('targetPrice') ? document.getElementById('targetPrice').value : "";
-            const btn = document.getElementById('btnOrder');
+            const btnOrder = document.getElementById('btnOrder');
 
             localStorage.setItem('pref_server', server);
             localStorage.setItem('pref_op', operator);
 
-            btn.disabled = true; btn.innerText = "MEMBIDIK TARGET...";
+            if(!isAuto) { btnOrder.disabled = true; btnOrder.innerText = "MEMBIDIK TARGET..."; }
             document.getElementById('display-number').innerText = "Ordering...";
             document.getElementById('display-number').style.color = "var(--accent-primary)";
-            document.getElementById('status-desc').innerText = "Menunggu respons server...";
+            document.getElementById('status-desc').innerText = isAuto ? "Auto Sniper sedang memantau stok..." : "Menunggu respons server...";
             document.getElementById('status-desc').style.color = "var(--text-muted)";
+
+            let orderSukses = false;
 
             try {
                 const res = await fetch(`${API_BASE}/order?server=${server}&operator=${operator}&targetprice=${targetPrice}`);
                 const data = await res.json();
 
                 if (data.id && data.number) {
+                    orderSukses = true;
                     localStorage.setItem('order_id', data.id); localStorage.setItem('phone', data.number);
                     document.getElementById('display-id').innerText = data.id; 
                     document.getElementById('display-number').innerText = data.number;
                     document.getElementById('display-number').style.color = "var(--accent-primary)";
                     document.getElementById('otp-box').innerText = "WAITING"; 
                     document.getElementById('otp-box').style.color = "#0d9488";
-                    document.getElementById('status-desc').innerText = "Menunggu SMS Masuk...";
+                    document.getElementById('status-desc').innerText = "DAPAT NOMOR! Menunggu SMS Masuk...";
+                    document.getElementById('notif-sound').play(); 
+                    
+                    if(autoSniperActive) toggleAutoSniper();
+                    
                     startPolling();
+                    checkBalance(); // Update saldo otomatis setelah berhasil order
                 } else {
-                    let pesanError = data.error || data.msg || data.message || JSON.stringify(data);
-                    document.getElementById('display-number').innerText = "GAGAL ORDER";
-                    document.getElementById('display-number').style.color = "#ef4444";
+                    let pesanError = data.error || JSON.stringify(data);
+                    document.getElementById('display-number').innerText = "STOK KOSONG";
+                    document.getElementById('display-number').style.color = "var(--accent-danger)";
                     document.getElementById('status-desc').innerText = "Error: " + pesanError;
-                    document.getElementById('status-desc').style.color = "#ef4444";
+                    document.getElementById('status-desc').style.color = "var(--accent-danger)";
                 }
             } catch (e) { 
                 document.getElementById('display-number').innerText = "Error Worker";
-                document.getElementById('display-number').style.color = "#ef4444";
+                document.getElementById('display-number').style.color = "var(--accent-danger)";
                 document.getElementById('status-desc').innerText = "Gagal terhubung ke Cloudflare Worker";
-                document.getElementById('status-desc').style.color = "#ef4444";
+                document.getElementById('status-desc').style.color = "var(--accent-danger)";
             } finally {
-                btn.disabled = false; btn.innerText = "AMBIL NOMOR SHOPEE";
+                if(!isAuto) { btnOrder.disabled = false; btnOrder.innerText = "AMBIL NOMOR SHOPEE"; }
+                if (autoSniperActive && !orderSukses) {
+                    document.getElementById('status-desc').innerText += "\n(Mencoba lagi dalam 3 detik...)";
+                    sniperTimeout = setTimeout(() => { orderNumber(true); }, 3000);
+                }
             }
         }
 
@@ -204,10 +269,10 @@
                 if (data.otp && data.otp !== "-") {
                     document.getElementById('otp-box').innerText = data.otp;
                     if (data.otp.startsWith("ERR:") || data.otp.startsWith("STAT:")) { 
-                        document.getElementById('otp-box').style.color = "#ef4444"; 
+                        document.getElementById('otp-box').style.color = "var(--accent-danger)"; 
                     } 
                     else {
-                        document.getElementById('otp-box').style.color = "#10b981"; 
+                        document.getElementById('otp-box').style.color = "var(--accent-success)"; 
                         document.getElementById('status-desc').innerText = "OTP MASUK!";
                         document.getElementById('notif-sound').play(); 
                         clearInterval(checkTimer);
@@ -224,41 +289,22 @@
         
         function copyNumber(btn) { 
             const num = document.getElementById('display-number').innerText; 
-            if(num && num !== "Ready..." && num !== "GAGAL ORDER" && num !== "Error Worker") { 
+            if(num && num !== "Ready..." && num !== "STOK KOSONG" && num !== "Error Worker") { 
                 navigator.clipboard.writeText(num); 
                 buttonFeedback(btn, "TERSALIN!");
             } 
         }
 
         function generateRandomData(btn) {
-            const firstNames = [
-                "Aditya", "Budi", "Cahyo", "Deni", "Eko", "Fajar", "Gilang", "Hendra", "Irfan", "Joko", 
-                "Kevin", "Lukman", "Muhamad", "Nur", "Oki", "Putra", "Rizky", "Surya", "Tri", "Udin", 
-                "Wahyu", "Yoga", "Zainal", "Andi", "Bambang", "Candra", "Darmawan", "Erwin", "Ferry", "Ayu", 
-                "Bunga", "Citra", "Dian", "Eka", "Fitri", "Gita", "Hani", "Intan", "Jihan", "Maya"
-            ];
-            
-            const lastNames = [
-                "Pratama", "Santoso", "Wibowo", "Setiawan", "Nugroho", "Hidayat", "Saputra", "Gunawan", "Hakim", "Susanto", 
-                "Wijaya", "Maulana", "Akbar", "Rahman", "Ramadhan", "Fauzi", "Lesmana", "Haryanto", "Syahputra", "Kurniawan", 
-                "Purnomo", "Arifin", "Kusuma", "Sugiarto", "Syah", "Susilo", "Lestari", "Jelita", "Kirana", "Sastro", 
-                "Putri", "Savitri", "Amira", "Nuraini", "Mutiara", "Maharani"
-            ];
-
-            const streets = [
-                "Jl. Merdeka No. 10", "Jl. Melati Blok C", "Perum Cahaya Indah No. 5", "Jl. Gajah Mada No. 14", 
-                "Jl. Jendral Sudirman No. 8", "Jl. Diponegoro Blok B", "Komp. Makmur Jaya No. 22", "Jl. Pahlawan No. 45"
-            ]; 
-            const cities = [
-                "Jakarta (10110)", "Bandung (40111)", "Surabaya (60111)", "Tangerang (15111)", 
-                "Semarang (50111)", "Malang (65111)", "Bekasi (17111)", "Depok (16411)"
-            ];
+            const firstNames = ["Aditya", "Budi", "Cahyo", "Deni", "Eko", "Fajar", "Gilang", "Hendra", "Irfan", "Joko", "Ayu", "Bunga", "Citra", "Dian", "Eka"];
+            const lastNames = ["Pratama", "Santoso", "Wibowo", "Setiawan", "Nugroho", "Hidayat", "Saputra", "Gunawan", "Lestari", "Jelita", "Kirana"];
+            const streets = ["Jl. Merdeka No. 10", "Jl. Melati Blok C", "Perum Cahaya Indah No. 5", "Jl. Gajah Mada No. 14"]; 
+            const cities = ["Jakarta (10110)", "Bandung (40111)", "Surabaya (60111)", "Tangerang (15111)"];
 
             const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];
             const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)];
-            const fullName = `${randomFirstName} ${randomLastName}`;
-
-            document.getElementById('util-nama').innerText = fullName;
+            
+            document.getElementById('util-nama').innerText = `${randomFirstName} ${randomLastName}`;
             document.getElementById('util-alamat').innerText = streets[Math.floor(Math.random() * streets.length)]; 
             document.getElementById('util-detail').innerText = cities[Math.floor(Math.random() * cities.length)];
 
@@ -269,14 +315,8 @@
             const nama = document.getElementById('util-nama').innerText;
             const alamat = document.getElementById('util-alamat').innerText;
             const detail = document.getElementById('util-detail').innerText;
-            
-            if(nama === "-") {
-                return;
-            }
-
-            const textToCopy = `${nama}\n${alamat}\n${detail}`;
-            navigator.clipboard.writeText(textToCopy);
-            
+            if(nama === "-") return;
+            navigator.clipboard.writeText(`${nama}\n${alamat}\n${detail}`);
             buttonFeedback(btn, "TERSALIN!");
         }
     </script>
