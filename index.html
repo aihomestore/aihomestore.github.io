@@ -21,7 +21,6 @@
         body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Segoe UI', Tahoma, sans-serif; padding: 15px; }
         .main-card { background-color: var(--card-bg); border-radius: 15px; padding: 25px; border: 1px solid var(--border-color); margin-bottom: 20px; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.05); }
         
-        /* Flexbox untuk menyejajarkan Title dan Saldo */
         .title-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .section-title { font-size: 0.95rem; font-weight: 800; color: var(--accent-primary); border-left: 4px solid var(--accent-primary); padding-left: 12px; margin-bottom: 0; text-transform: uppercase; letter-spacing: 0.5px; }
         .balance-badge { background-color: #f1f5f9; color: var(--text-main); font-size: 0.75rem; font-weight: 800; padding: 6px 12px; border-radius: 20px; border: 1px solid #cbd5e1; }
@@ -57,7 +56,6 @@
         <div class="main-card">
             <div class="title-wrapper">
                 <div class="section-title">🚀 SHOPEE OTP ENGINE</div>
-                <!-- Indikator Saldo -->
                 <div class="balance-badge"><i class="fa-solid fa-wallet"></i> Rp <span id="display-balance">...</span></div>
             </div>
             
@@ -87,9 +85,7 @@
                 </div>
             </div>
 
-            <!-- Tombol Manual -->
             <button class="btn-order" onclick="orderNumber(false)" id="btnOrder">AMBIL NOMOR SHOPEE</button>
-            <!-- Tombol Auto Sniper -->
             <button class="btn-order btn-auto" onclick="toggleAutoSniper()" id="btnAuto">🤖 MULAI AUTO SNIPER</button>
 
             <div class="mt-4">
@@ -109,7 +105,7 @@
         </div>
 
         <div class="main-card">
-            <div class="section-title">🏠 NAMA DAN ALAMAT</div>
+            <div class="section-title">🏠 NAMA DAN ALAMAT (JAWA)</div>
             <div class="data-box">
                 <div class="mb-1">Nama: <b id="util-nama">-</b></div>
                 <div class="mb-1">Alamat: <b id="util-alamat">-</b></div>
@@ -145,11 +141,9 @@
         function toggleSmsTarget() {
             const srv = document.getElementById('serverSelect').value;
             document.getElementById('sniperBox').style.display = (srv === 'smscode') ? 'block' : 'none';
-            // Panggil cek saldo setiap kali ganti server
             checkBalance();
         }
 
-        // FUNGSI BARU: CEK SALDO DARI WORKER
         async function checkBalance() {
             const server = document.getElementById('serverSelect').value;
             const balanceEl = document.getElementById('display-balance');
@@ -177,7 +171,7 @@
                 document.getElementById('serverSelect').value = localStorage.getItem('pref_server');
                 toggleSmsTarget();
             } else {
-                checkBalance(); // Load saldo awal
+                checkBalance();
             }
             if(localStorage.getItem('pref_op')) document.getElementById('operatorSelect').value = localStorage.getItem('pref_op');
         };
@@ -236,7 +230,7 @@
                     if(autoSniperActive) toggleAutoSniper();
                     
                     startPolling();
-                    checkBalance(); // Update saldo otomatis setelah berhasil order
+                    checkBalance();
                 } else {
                     let pesanError = data.error || JSON.stringify(data);
                     document.getElementById('display-number').innerText = "STOK KOSONG";
@@ -296,10 +290,36 @@
         }
 
         function generateRandomData(btn) {
-            const firstNames = ["Aditya", "Budi", "Cahyo", "Deni", "Eko", "Fajar", "Gilang", "Hendra", "Irfan", "Joko", "Ayu", "Bunga", "Citra", "Dian", "Eka"];
-            const lastNames = ["Pratama", "Santoso", "Wibowo", "Setiawan", "Nugroho", "Hidayat", "Saputra", "Gunawan", "Lestari", "Jelita", "Kirana"];
-            const streets = ["Jl. Merdeka No. 10", "Jl. Melati Blok C", "Perum Cahaya Indah No. 5", "Jl. Gajah Mada No. 14"]; 
-            const cities = ["Jakarta (10110)", "Bandung (40111)", "Surabaya (60111)", "Tangerang (15111)"];
+            const firstNames = ["Aditya", "Budi", "Cahyo", "Deni", "Eko", "Fajar", "Gilang", "Hendra", "Irfan", "Joko", "Ayu", "Bunga", "Citra", "Dian", "Eka", "Putra", "Rizky", "Surya", "Wahyu", "Zainal"];
+            const lastNames = ["Pratama", "Santoso", "Wibowo", "Setiawan", "Nugroho", "Hidayat", "Saputra", "Gunawan", "Lestari", "Jelita", "Kirana", "Maulana", "Akbar", "Kurniawan", "Purnomo"];
+            
+            // 50 Alamat Acak di Pulau Jawa
+            const streets = [
+                "Jl. Jend. Sudirman No. 12", "Jl. M.H. Thamrin No. 45", "Jl. Pangeran Diponegoro No. 8", "Jl. Gajah Mada No. 11", "Jl. Hayam Wuruk No. 22", 
+                "Jl. Merdeka Barat No. 7", "Jl. Imam Bonjol No. 33", "Jl. Teuku Umar No. 15", "Jl. Ahmad Yani No. 99", "Jl. Asia Afrika No. 101", 
+                "Jl. Braga No. 23", "Jl. Malioboro No. 56", "Jl. Pemuda No. 10", "Jl. Pahlawan No. 28", "Jl. Veteran No. 42", 
+                "Jl. Basuki Rahmat No. 1", "Jl. Tunjungan No. 5", "Jl. Raya Darmo No. 88", "Jl. Ir. H. Juanda No. 14", "Jl. S. Parman No. 67", 
+                "Jl. Gatot Subroto No. 34", "Jl. MT. Haryono No. 55", "Jl. Rasuna Said No. 19", "Jl. K.H. Mas Mansyur No. 21", "Jl. Kebon Kacang Blok B", 
+                "Jl. Letjen Suprapto No. 3", "Jl. Cihampelas No. 12", "Jl. Riau No. 4", "Jl. Dago No. 18", "Jl. Pandanaran No. 9", 
+                "Jl. Simpang Lima No. 2", "Jl. Slamet Riyadi No. 77", "Jl. Rajawali No. 11", "Jl. Cenderawasih No. 24", "Jl. Merpati Blok C", 
+                "Jl. Kenari No. 17", "Jl. Melati No. 40", "Jl. Mawar No. 13", "Jl. Anggrek Blok D", "Jl. Dahlia No. 6", 
+                "Jl. Teratai No. 25", "Jl. Cempaka No. 30", "Jl. Mangga No. 8", "Jl. Durian Blok A", "Jl. Rambutan No. 31", 
+                "Jl. Apel No. 44", "Jl. Nanas No. 50", "Jl. Delima No. 20", "Jl. Kelinci No. 9", "Jl. Kancil Blok E"
+            ]; 
+            
+            // 50 Kota di Pulau Jawa (DKI, Jabar, Jateng, DIY, Jatim) beserta Kodepos
+            const cities = [
+                "Jakarta Pusat (10110)", "Jakarta Selatan (12110)", "Jakarta Barat (11110)", "Jakarta Timur (13110)", "Jakarta Utara (14110)", 
+                "Bogor (16110)", "Depok (16411)", "Tangerang (15111)", "Tangerang Selatan (15310)", "Bekasi (17111)", 
+                "Bandung (40111)", "Cimahi (40512)", "Cirebon (45111)", "Tasikmalaya (46111)", "Garut (44111)", 
+                "Sukabumi (43111)", "Cianjur (43211)", "Purwakarta (41111)", "Karawang (41311)", "Subang (41211)", 
+                "Sumedang (45311)", "Semarang (50111)", "Surakarta / Solo (57111)", "Magelang (56111)", "Salatiga (50711)", 
+                "Tegal (52111)", "Pekalongan (51111)", "Purwokerto (53111)", "Cilacap (53211)", "Kudus (59311)", 
+                "Jepara (59411)", "Pati (59111)", "Yogyakarta (55111)", "Sleman (55511)", "Bantul (55711)", 
+                "Surabaya (60111)", "Malang (65111)", "Sidoarjo (61211)", "Gresik (61111)", "Kediri (64111)", 
+                "Madiun (63111)", "Mojokerto (61311)", "Pasuruan (67111)", "Probolinggo (67211)", "Jember (68111)", 
+                "Banyuwangi (68411)", "Tuban (62311)", "Bojonegoro (62111)", "Jombang (61411)", "Blitar (66111)"
+            ];
 
             const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];
             const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)];
@@ -314,12 +334,4 @@
         function copyAlamatData(btn) {
             const nama = document.getElementById('util-nama').innerText;
             const alamat = document.getElementById('util-alamat').innerText;
-            const detail = document.getElementById('util-detail').innerText;
-            if(nama === "-") return;
-            navigator.clipboard.writeText(`${nama}\n${alamat}\n${detail}`);
-            buttonFeedback(btn, "TERSALIN!");
-        }
-    </script>
-</body>
-    </html>
-    
+            const detail = document.getElementByI
